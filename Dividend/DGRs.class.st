@@ -18,16 +18,16 @@ DGRs >> above: aNumber [
 { #category : 'accessing' }
 DGRs >> printOn: aStream [
  aStream 
- 	nextPutAll: '1Y=';
+ 	nextPutAll: 'Y1=';
  	nextPutAll: y1 asString;
- 	nextPutAll: ' 3Y=';
+ 	nextPutAll: '; Y3=';
  	nextPutAll: y3 asString;
- 	nextPutAll: ' 5Y=';
+ 	nextPutAll: '; Y5=';
  	nextPutAll: y5 asString;
- 	nextPutAll: ' 10Y=';
+ 	nextPutAll: '; Y10=';
  	nextPutAll: y10 asString;
- 	nextPutAll: ' m=';
- 	nextPutAll: self slope asString
+ 	nextPutAll: '; m=';
+ 	nextPutAll: (self slope round: 2) asString
 ]
 
 { #category : 'accessing' }

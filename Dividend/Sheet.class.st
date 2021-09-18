@@ -1,19 +1,19 @@
 Class {
-	#name : 'Candidates',
+	#name : 'Sheet',
 	#superclass : 'Object',
 	#instVars : [
-		'candidates'
+		'companies'
 	],
 	#category : 'Dividend-Dividend'
 }
 
 { #category : 'accessing' }
-Candidates class >> fromFile: path [
+Sheet class >> fromFile: path [
 	^ path asFileReference readStreamDo: [:stream | self fromString: stream contents ]
 ]
 
 { #category : 'accessing' }
-Candidates class >> fromString: aString [ 
+Sheet class >> fromString: aString [ 
 	| csv header candidates |
 	csv := CSVParser parse: aString.
 	header := Dictionary new.
@@ -40,21 +40,40 @@ Candidates class >> fromString: aString [
   			
  		)
 	].
-	^ self new setCandidates: candidates
+	^ self new setCompanies: candidates
 ]
 
 { #category : 'accessing' }
-Candidates >> all [ 
-	^ candidates
+Sheet >> all [ 
+	^ Sheet new setCompanies:companies
 ]
 
 { #category : 'accessing' }
-Candidates >> candidates: keyValues [
-	^ candidates select: [:each | each isCandidate: keyValues asDictionary ]
+Sheet >> findValue: keyValues [
+	^ Sheet new setCompanies:(companies select: [:each | each interesting: keyValues asDictionary ] )
 ]
 
 { #category : 'accessing' }
-Candidates >> setCandidates: anOrderedCollection [ 
-	candidates := anOrderedCollection.
+Sheet >> gtListOn: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'List';
+		priority: 1;
+		items: [ companies ];
+		column: 'Name' text: #name;
+		column: 'Industry' text: #industry;
+		column: 'Yield' text: #yield;
+		column: 'Fiar' text: #fairValue;
+		column: 'DGR' text: #dgrs.
+]
+
+{ #category : 'accessing' }
+Sheet >> select: aBlock [
+	^ Sheet new setCompanies: (companies select: aBlock)
+]
+
+{ #category : 'accessing' }
+Sheet >> setCompanies: anOrderedCollection [ 
+	companies := anOrderedCollection.
 	^ self
 ]
