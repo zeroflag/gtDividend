@@ -40,6 +40,11 @@ Company >> div: aNumber [
 ]
 
 { #category : 'accessing' }
+Company >> dividendPerYearPerShare [
+	^ div * payoutsPerYear
+]
+
+{ #category : 'accessing' }
 Company >> eps [
 	^ eps
 ]
@@ -84,8 +89,8 @@ Company >> gtView: aView [
 					nextPutAll: 'Price = ';
 					nextPutAll: price asString;
 					cr;
-					nextPutAll: 'Expected price = '; "TODO:https://www.investopedia.com/terms/g/gordongrowthmodel.asp "
-					nextPutAll: ((div / (0.1 - (dgrs y1 / 100))) round: 2) asString;
+					nextPutAll: 'Expected price = '; "TODO: negative. zerodiv https://www.investopedia.com/terms/g/gordongrowthmodel.asp"
+					nextPutAll: ((self dividendPerYearPerShare / (0.1 - (dgrs y1 / 100))) round: 2) asString;
 					cr;					
 					nextPutAll: 'P/E = '; 
 					nextPutAll: ppe asString;
@@ -100,7 +105,7 @@ Company >> gtView: aView [
 					nextPutAll: payoutsPerYear asString;					
 					cr; cr;
 					nextPutAll: 'Div/EPS = ';
-					nextPutAll: ([ ((div * payoutsPerYear / eps) * 100 round: 2) asString ] on: ZeroDivide do: [ 'N/A ' ]);
+					nextPutAll: ([ ((self dividendPerYearPerShare / eps) * 100 round: 2) asString ] on: ZeroDivide do: [ 'N/A ' ]);
 					nextPut: $%;
 					cr; cr;
 					nextPutAll: dgrs asString.
