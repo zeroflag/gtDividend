@@ -44,6 +44,11 @@ Candidates class >> fromString: aString [
 ]
 
 { #category : 'accessing' }
+Candidates >> all [ 
+	^ candidates
+]
+
+{ #category : 'accessing' }
 Candidates >> candidates: keyValues [
 	^ candidates select: [:each | each isCandidate: keyValues asDictionary ]
 ]

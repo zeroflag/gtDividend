@@ -16,11 +16,6 @@ DGRs >> above: aNumber [
 ]
 
 { #category : 'accessing' }
-DGRs >> growing [
-	^ self recentlyGrowing and: [ y10 isNil or: [ y5 >= y10 or: [ (y5 - y10) abs < 0.1 ] ] ]
-]
-
-{ #category : 'accessing' }
 DGRs >> printOn: aStream [
  aStream 
  	nextPutAll: '1Y=';
@@ -30,17 +25,33 @@ DGRs >> printOn: aStream [
  	nextPutAll: ' 5Y=';
  	nextPutAll: y5 asString;
  	nextPutAll: ' 10Y=';
- 	nextPutAll: y10 asString.
+ 	nextPutAll: y10 asString;
+ 	nextPutAll: ' m=';
+ 	nextPutAll: self slope asString
 ]
 
 { #category : 'accessing' }
-DGRs >> recentlyGrowing [
-	^ self veryRecentlyGrowing and: [ y3 >= y5 or: [ (y3 - y5) abs < 0.1 ] ]
+DGRs >> slope [
+    | dgrs sxsy sx sy n sx2 |
+	dgrs := OrderedCollection new.
+	y10 ifNotNil: [ dgrs add: y10 ].
+	y5 ifNotNil: [ dgrs add: y5 ].
+	y3 ifNotNil: [ dgrs add: y3 ].	
+	y1 ifNotNil: [ dgrs add: y1 ].
+	sx := (1 to: dgrs size) sum.
+	sy := dgrs sum.
+	sxsy := 0. sx2 := 0.
+	n := dgrs size.
+	dgrs doWithIndex: [ :y :x | 
+		sxsy := sxsy + (x * y).
+		sx2 := sx2 + (x * x) ].
+	^ ((n * sxsy) - (sx * sy)) / ((n * sx2) - (sx * sx))
 ]
 
 { #category : 'accessing' }
-DGRs >> veryRecentlyGrowing [
-	^ y1 >= y3 or: [ (y1 - y3) abs < 0.3 ]
+DGRs >> stable: aDictionary [
+	^ self slope >= (aDictionary at: #slope)
+		
 ]
 
 { #category : 'accessing' }

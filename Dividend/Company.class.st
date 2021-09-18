@@ -51,9 +51,13 @@ Company >> industry: anObject [
 
 { #category : 'accessing' }
 Company >> isCandidate: aDictionary [
-	^ ppe < (aDictionary at: #ppe)
-		and: [ dgrs growing and: [ (dgrs above: (aDictionary at: #inflation) ) 
-		and: [ yield between: ((aDictionary at: #yield) * 1.5) and: ((aDictionary at: #yield) * 5) ] ] ]
+
+	^ ppe < (aDictionary at: #ppe) and: [ 
+		  (dgrs stable: aDictionary) and: [ 
+			  (dgrs above: (aDictionary at: #inflation)) and: [ 
+				  yield
+					  between: (aDictionary at: #yield) * 1.5
+					  and: (aDictionary at: #yield) * 5 ] ] ]
 ]
 
 { #category : 'accessing' }
