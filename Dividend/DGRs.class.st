@@ -12,7 +12,10 @@ Class {
 
 { #category : 'accessing' }
 DGRs >> above: aNumber [
-	^ y1 > aNumber and: [ y3 > aNumber and: [ y5 > aNumber and: [ y10 isNil or: [ y10 > aNumber ] ] ] ]
+	^ y1 isNil or: [ y1 > aNumber
+		and: [ y3  isNil or: [ y3 > aNumber
+		and: [ y5  isNil or: [ y5 > aNumber
+		and: [ y10 isNil or: [ y10 > aNumber ] ] ] ] ] ] ]
 ]
 
 { #category : 'accessing' }

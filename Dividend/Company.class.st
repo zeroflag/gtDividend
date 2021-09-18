@@ -8,7 +8,11 @@ Class {
 		'industry',
 		'ticker',
 		'name',
-		'ppe'
+		'ppe',
+		'eps',
+		'div',
+		'payoutsPerYear',
+		'price'
 	],
 	#category : 'Dividend'
 }
@@ -26,8 +30,28 @@ Company >> dgrs: anObject [
 ]
 
 { #category : 'accessing' }
+Company >> div [
+	^ div
+]
+
+{ #category : 'accessing' }
+Company >> div: aNumber [
+	div := aNumber
+]
+
+{ #category : 'accessing' }
 Company >> dividendChartUrl [
 	^ 'http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield'
+]
+
+{ #category : 'accessing' }
+Company >> eps [
+	^ eps
+]
+
+{ #category : 'accessing' }
+Company >> eps: aNumber [
+	eps := aNumber
 ]
 
 { #category : 'accessing' }
@@ -60,8 +84,24 @@ Company >> gtView: aView [
 					nextPutAll: yield asString;
 					nextPut: $%;
 					cr;
+					nextPutAll: 'Price = ';
+					nextPutAll: price asString;
+					cr;
 					nextPutAll: 'P/E = '; 
 					nextPutAll: ppe asString;
+					cr; cr;
+					nextPutAll: 'EPS 1Y = ';
+					nextPutAll: eps asString;
+					cr;
+					nextPutAll: 'Current Div = ';
+					nextPutAll: div asString;
+					cr;
+					nextPutAll: 'Payouts per year = ';
+					nextPutAll: payoutsPerYear asString;					
+					cr; cr;
+					nextPutAll: 'Div/EPS = ';
+					nextPutAll: ([ ((div * payoutsPerYear / eps) * 100 round: 2) asString ] on: ZeroDivide do: [ 'N/A ' ]);
+					nextPut: $%;
 					cr; cr;
 					nextPutAll: dgrs asString.
 			].
@@ -119,9 +159,10 @@ Company >> interesting: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
 		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-				  yield
-					  between: (aDictionary at: #yield) * 1.5
-					  and: (aDictionary at: #yield) * 5 ] ] ]
+			  	dgrs y3 + yield >= 9 and: [
+				  	yield
+					  	between: (aDictionary at: #yield) * 1.5
+					  	and: (aDictionary at: #yield) * 5 ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -142,6 +183,16 @@ Company >> name: anObject [
 ]
 
 { #category : 'accessing' }
+Company >> payoutsPerYear [
+	^ payoutsPerYear
+]
+
+{ #category : 'accessing' }
+Company >> payoutsPerYear: aNumber [
+	payoutsPerYear := aNumber
+]
+
+{ #category : 'accessing' }
 Company >> ppe [
 
 	^ ppe
@@ -151,6 +202,16 @@ Company >> ppe [
 Company >> ppe: anObject [
 
 	ppe := anObject
+]
+
+{ #category : 'accessing' }
+Company >> price [
+	^ price
+]
+
+{ #category : 'accessing' }
+Company >> price: aNumber [
+	price := aNumber
 ]
 
 { #category : 'accessing' }
