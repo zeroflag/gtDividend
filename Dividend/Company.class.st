@@ -40,11 +40,6 @@ Company >> div: aNumber [
 ]
 
 { #category : 'accessing' }
-Company >> dividendChartUrl [
-	^ 'http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield'
-]
-
-{ #category : 'accessing' }
 Company >> eps [
 	^ eps
 ]
@@ -82,11 +77,16 @@ Company >> gtView: aView [
 					cr; cr;
 					nextPutAll: 'Dividend = ';
 					nextPutAll: yield asString;
-					nextPut: $%;
+					nextPutAll: '% (';
+					nextPutAll: div asString;
+					nextPutAll: '$ / share)';
 					cr;
 					nextPutAll: 'Price = ';
 					nextPutAll: price asString;
 					cr;
+					nextPutAll: 'Expected price = '; "TODO:https://www.investopedia.com/terms/g/gordongrowthmodel.asp "
+					nextPutAll: ((div / (0.1 - (dgrs y1 / 100))) round: 2) asString;
+					cr;					
 					nextPutAll: 'P/E = '; 
 					nextPutAll: ppe asString;
 					cr; cr;
@@ -135,11 +135,19 @@ Company >> gtView: aView [
 			verticalContainer addChild: detailsTextContainer.
 			container addChild: verticalContainer.
 			container
-		
-		];
-		actionButtonIcon: BrGlamorousVectorIcons browse 
-			tooltip: 'YCharts' 
-			action: [ :aToggle :company | WebBrowser openOn: self dividendChartUrl ].
+		];		
+		actionButtonIcon: BrGlamorousVectorIcons note 
+			tooltip: 'Yahoo' 
+			action: [ :aToggle :company | WebBrowser openOn: 'https://finance.yahoo.com/quote/BEN/key-statistics?p=', ticker ];
+		actionButtonIcon: BrGlamorousVectorIcons performance 
+			tooltip: 'Dividend %' 
+			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield') ];			
+		actionButtonIcon: BrGlamorousVectorIcons up 
+			tooltip: 'Total Annual Dividend' 
+			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/total_stock_dividends_paid_annual') ];
+		actionButtonIcon: BrGlamorousVectorIcons down 
+			tooltip: 'FCF Annual' 
+			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/free_cash_flow_annual') ].			
 ]
 
 { #category : 'accessing' }

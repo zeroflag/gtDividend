@@ -100,6 +100,6 @@ Sheet >> select: aBlock [
 
 { #category : 'accessing' }
 Sheet >> setCompanies: anOrderedCollection [ 
-	companies := anOrderedCollection.
+	companies := anOrderedCollection sort: [:a :b | a name < b name ].
 	^ self
 ]
