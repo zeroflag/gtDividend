@@ -27,7 +27,7 @@ Company >> dgrs: anObject [
 
 { #category : 'accessing' }
 Company >> dividendChartUrl [
-	^ 'http://ycharts.com/companies/' , ticker , '/dividend_yield'
+	^ 'http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield'
 ]
 
 { #category : 'accessing' }
@@ -53,7 +53,7 @@ Company >> gtView: aView [
 			details := String streamContents: [:s |
 				s 
 					nextPutAll: industry;
-					nextPutAll: ' / ';
+					cr;
 					nextPutAll: fairValue;
 					cr; cr;
 					nextPutAll: 'Dividend = ';

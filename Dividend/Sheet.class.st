@@ -63,8 +63,9 @@ Sheet >> gtListOn: aView [
 		column: 'Name' text: #name;
 		column: 'Industry' text: #industry;
 		column: 'Yield' text: #yield;
+		column: 'P/E' text: #ppe;
 		column: 'Fiar' text: #fairValue;
-		column: 'DGR' text: #dgrs.
+		column: 'Avg DGR' text: [:c | c dgrs avg round: 1 ]
 ]
 
 { #category : 'accessing' }

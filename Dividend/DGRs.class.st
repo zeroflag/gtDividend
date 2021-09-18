@@ -16,17 +16,27 @@ DGRs >> above: aNumber [
 ]
 
 { #category : 'accessing' }
+DGRs >> avg [
+	| dgrs |
+	dgrs := OrderedCollection new.
+	y10 ifNotNil: [ dgrs add: y10 ].
+	y5 ifNotNil: [ dgrs add: y5 ].
+	y3 ifNotNil: [ dgrs add: y3 ].	
+	y1 ifNotNil: [ dgrs add: y1 ].
+	^ dgrs average
+]
+
+{ #category : 'accessing' }
 DGRs >> printOn: aStream [
  aStream 
- 	nextPutAll: 'Y1=';
- 	nextPutAll: y1 asString;
- 	nextPutAll: '; Y3=';
- 	nextPutAll: y3 asString;
- 	nextPutAll: '; Y5=';
- 	nextPutAll: y5 asString;
- 	nextPutAll: '; Y10=';
  	nextPutAll: y10 asString;
- 	nextPutAll: '; m=';
+ 	nextPutAll: ' => ';
+ 	nextPutAll: y5 asString;
+ 	nextPutAll: ' => ';
+ 	nextPutAll: y3 asString;
+ 	nextPutAll: ' => ';
+ 	nextPutAll: y1 asString;
+ 	nextPutAll: ' m = ';
  	nextPutAll: (self slope round: 2) asString
 ]
 
