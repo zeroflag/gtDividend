@@ -12,21 +12,23 @@ Class {
 
 { #category : 'accessing' }
 DGRs >> above: aNumber [
-	^ y1 isNil or: [ y1 > aNumber
-		and: [ y3  isNil or: [ y3 > aNumber
-		and: [ y5  isNil or: [ y5 > aNumber
-		and: [ y10 isNil or: [ y10 > aNumber ] ] ] ] ] ] ]
+	^ self asOrderedCollection allSatisfy: [:each | each > aNumber ]
+]
+
+{ #category : 'accessing' }
+DGRs >> asOrderedCollection [
+	| o |
+	o := OrderedCollection new.
+	y10 ifNotNil: [ o add: y10 ].
+	y5 ifNotNil: [ o add: y5 ].
+	y3 ifNotNil: [ o add: y3 ].	
+	y1 ifNotNil: [ o add: y1 ].
+	^ o
 ]
 
 { #category : 'accessing' }
 DGRs >> avg [
-	| dgrs |
-	dgrs := OrderedCollection new.
-	y10 ifNotNil: [ dgrs add: y10 ].
-	y5 ifNotNil: [ dgrs add: y5 ].
-	y3 ifNotNil: [ dgrs add: y3 ].	
-	y1 ifNotNil: [ dgrs add: y1 ].
-	^ dgrs average
+	^ self asOrderedCollection average
 ]
 
 { #category : 'accessing' }
@@ -46,11 +48,7 @@ DGRs >> printOn: aStream [
 { #category : 'accessing' }
 DGRs >> slope [
     | dgrs sxsy sx sy n sx2 |
-	dgrs := OrderedCollection new.
-	y10 ifNotNil: [ dgrs add: y10 ].
-	y5 ifNotNil: [ dgrs add: y5 ].
-	y3 ifNotNil: [ dgrs add: y3 ].	
-	y1 ifNotNil: [ dgrs add: y1 ].
+	dgrs := self asOrderedCollection.
 	sx := (1 to: dgrs size) sum.
 	sy := dgrs sum.
 	sxsy := 0. sx2 := 0.
@@ -67,6 +65,11 @@ DGRs >> stable: aDictionary [
 		at: #slope 
 		ifPresent: [ :limit | self slope >= limit ]
 		ifAbsent: [ true ]
+]
+
+{ #category : 'accessing' }
+DGRs >> veryHigh [
+	^ self asOrderedCollection anySatisfy: [:each | each > 12 ]
 ]
 
 { #category : 'accessing' }

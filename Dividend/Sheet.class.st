@@ -103,3 +103,13 @@ Sheet >> setCompanies: anOrderedCollection [
 	companies := anOrderedCollection sort: [:a :b | a name < b name ].
 	^ self
 ]
+
+{ #category : 'accessing' }
+Sheet >> sort: aBlock [
+	companies sort: aBlock
+]
+
+{ #category : 'accessing' }
+Sheet >> sortByYield [
+	self sort:[:a :b| a yield > b yield ].
+]

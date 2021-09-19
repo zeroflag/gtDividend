@@ -57,8 +57,9 @@ Company >> eps: aNumber [
 { #category : 'accessing' }
 Company >> fairPrice [
 	"https://www.investopedia.com/terms/g/gordongrowthmodel.asp"
+	"Because the model assumes a constant growth rate, it is generally only used for companies with stable growth rates in dividends per share."
 	| d |
-	d := 0.1 - (dgrs y1 / 100).
+	d := 0.1 - (dgrs avg / 100).
 	^ d > 0 ifTrue: [ self dividendPerYearPerShare / d  ] ifFalse: [ 0 ]
 ]
 
@@ -151,7 +152,7 @@ Company >> gtView: aView [
 		];		
 		actionButtonIcon: BrGlamorousVectorIcons note 
 			tooltip: 'Yahoo' 
-			action: [ :aToggle :company | WebBrowser openOn: 'https://finance.yahoo.com/quote/BEN/key-statistics?p=', ticker ];
+			action: [ :aToggle :company | WebBrowser openOn: 'https://finance.yahoo.com/quote/',(ticker copyReplaceAll: '.' with: ''), '/key-statistics?p=', ticker ];
 		actionButtonIcon: BrGlamorousVectorIcons performance 
 			tooltip: 'Dividend %' 
 			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield') ];			
@@ -178,7 +179,7 @@ Company >> industry: anObject [
 { #category : 'accessing' }
 Company >> interesting: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
-		  (dgrs stable: aDictionary) and: [ 
+		  ((dgrs stable: aDictionary) or: [ dgrs veryHigh ]) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
 			  	dgrs y3 + yield >= (aDictionary at: #divdgrsum) and: [
 				  	yield
