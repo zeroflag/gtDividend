@@ -61,15 +61,11 @@ DGRs >> slope [
 
 { #category : 'accessing' }
 DGRs >> stable: aDictionary [
+	(self asOrderedCollection anySatisfy: [:each | each > (aDictionary at: #dgrhi) ]) ifTrue: [ ^ true ].
 	^ aDictionary 
 		at: #slope 
 		ifPresent: [ :limit | self slope >= limit ]
 		ifAbsent: [ true ]
-]
-
-{ #category : 'accessing' }
-DGRs >> veryHigh [
-	^ self asOrderedCollection anySatisfy: [:each | each > 12 ]
 ]
 
 { #category : 'accessing' }

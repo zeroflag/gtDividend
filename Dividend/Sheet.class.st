@@ -75,7 +75,10 @@ Sheet >> example [
 
 { #category : 'accessing' }
 Sheet >> findValue: keyValues [
-	^ Sheet new setCompanies:(companies select: [:each | each interesting: keyValues asDictionary ] )
+	| sheet |
+	sheet :=  Sheet new setCompanies:(companies select: [:each | each interesting: keyValues asDictionary ] ).
+	sheet sortByYield.
+	^ sheet
 ]
 
 { #category : 'accessing' }

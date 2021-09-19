@@ -179,7 +179,7 @@ Company >> industry: anObject [
 { #category : 'accessing' }
 Company >> interesting: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
-		  ((dgrs stable: aDictionary) or: [ dgrs veryHigh ]) and: [ 
+		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
 			  	dgrs y3 + yield >= (aDictionary at: #divdgrsum) and: [
 				  	yield
