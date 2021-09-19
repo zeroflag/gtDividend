@@ -63,8 +63,10 @@ DGRs >> slope [
 
 { #category : 'accessing' }
 DGRs >> stable: aDictionary [
-	^ self slope >= (aDictionary at: #slope)
-		
+	^ aDictionary 
+		at: #slope 
+		ifPresent: [ :limit | self slope >= limit ]
+		ifAbsent: [ true ]
 ]
 
 { #category : 'accessing' }

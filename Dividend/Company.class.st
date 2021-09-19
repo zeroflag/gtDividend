@@ -55,6 +55,14 @@ Company >> eps: aNumber [
 ]
 
 { #category : 'accessing' }
+Company >> fairPrice [
+	"https://www.investopedia.com/terms/g/gordongrowthmodel.asp"
+	| d |
+	d := 0.1 - (dgrs y1 / 100).
+	^ d > 0 ifTrue: [ self dividendPerYearPerShare / d  ] ifFalse: [ 0 ]
+]
+
+{ #category : 'accessing' }
 Company >> fairValue [
 
 	^ fairValue
@@ -89,8 +97,8 @@ Company >> gtView: aView [
 					nextPutAll: 'Price = ';
 					nextPutAll: price asString;
 					cr;
-					nextPutAll: 'Expected price = '; "TODO: negative. zerodiv https://www.investopedia.com/terms/g/gordongrowthmodel.asp"
-					nextPutAll: ((self dividendPerYearPerShare / (0.1 - (dgrs y1 / 100))) round: 2) asString;
+					nextPutAll: 'Gordon Fair price = '; 
+					nextPutAll: (self fairPrice round: 2) asString;
 					cr;					
 					nextPutAll: 'P/E = '; 
 					nextPutAll: ppe asString;
@@ -172,10 +180,10 @@ Company >> interesting: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
 		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-			  	dgrs y3 + yield >= 9 and: [
+			  	dgrs y3 + yield >= (aDictionary at: #divdgrsum) and: [
 				  	yield
-					  	between: (aDictionary at: #yield) * 1.5
-					  	and: (aDictionary at: #yield) * 5 ] ] ] ]
+					  	between: (aDictionary at: #avgdiv) * 1.5
+					  	and: (aDictionary at: #avgdiv) * 5 ] ] ] ]
 ]
 
 { #category : 'accessing' }
