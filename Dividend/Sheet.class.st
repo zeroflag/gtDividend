@@ -74,6 +74,11 @@ Sheet >> example [
 ]
 
 { #category : 'accessing' }
+Sheet >> findByTicker: aString [ 
+	^ companies detect: [:each | each ticker = aString] ifNone: [ nil ]
+]
+
+{ #category : 'accessing' }
 Sheet >> findValue: keyValues [
 	| sheet |
 	sheet :=  Sheet new setCompanies:(companies select: [:each | each interesting: keyValues asDictionary ] ).
