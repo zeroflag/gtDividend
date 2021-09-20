@@ -37,6 +37,7 @@ Sheet class >> fromString: aString [
 			  fairValue: (line values at: (header at: 'Fair Value')) value;
 			  eps: (line values at: (header at: 'EPS 1Y')) value asNumber;
 			  div: (line values at: (header at: 'Current Div')) value asNumber;
+			  years: (line values at: (header at: 'No Years')) value asNumber;
 			  payoutsPerYear: (line values at: (header at: 'Payouts/ Year')) value asNumber;
 			  price:  (line values at: (header at: 'Price')) value asNumber;
 			  dgrs: dgrs;
@@ -95,7 +96,8 @@ Sheet >> gtListOn: aView [
 		items: [ companies ];
 		column: 'Name' text: #name;
 		column: 'Industry' text: #industry;
-		column: 'Yield' text: #yield;
+		column: 'Years' text: #years;
+		column: 'Dividend %' text: #yield;
 		column: 'P/E' text: #ppe;
 		column: 'Fair' text: #fairValue;
 		column: 'Avg DGR' text: [:c | c dgrs avg round: 1 ]

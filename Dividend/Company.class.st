@@ -12,7 +12,8 @@ Class {
 		'eps',
 		'div',
 		'payoutsPerYear',
-		'price'
+		'price',
+		'years'
 	],
 	#category : 'Dividend'
 }
@@ -76,6 +77,11 @@ Company >> fairValue: anObject [
 ]
 
 { #category : 'accessing' }
+Company >> growing: aDictionary [
+	^ (dgrs y1 + yield >= (aDictionary at: #divdgrsum)) or: [ dgrs y3 + yield >= (aDictionary at: #divdgrsum) ]
+]
+
+{ #category : 'accessing' }
 Company >> gtView: aView [
 	<gtView>
 	^ aView explicit
@@ -88,6 +94,9 @@ Company >> gtView: aView [
 					nextPutAll: industry;
 					cr;
 					nextPutAll: fairValue;
+					cr;
+					nextPutAll: 'Since ';
+					nextPutAll: years asString, ' years';					
 					cr; cr;
 					nextPutAll: 'Dividend = ';
 					nextPutAll: yield asString;
@@ -100,7 +109,13 @@ Company >> gtView: aView [
 					cr;
 					nextPutAll: 'Gordon Fair price = '; 
 					nextPutAll: (self fairPrice round: 2) asString;
-					cr;					
+					cr;			
+					nextPutAll: 'GY1 = ';
+					nextPutAll: ((dgrs y1 + yield) round: 1) asString;
+					cr;
+					nextPutAll: 'GY3 = ';
+					nextPutAll: ((dgrs y3 + yield) round:1) asString;					
+					cr;
 					nextPutAll: 'P/E = '; 
 					nextPutAll: ppe asString;
 					cr; cr;
@@ -117,6 +132,9 @@ Company >> gtView: aView [
 					nextPutAll: ([ ((self dividendPerYearPerShare / eps) * 100 round: 2) asString ] on: ZeroDivide do: [ 'N/A ' ]);
 					nextPut: $%;
 					cr; cr;
+					nextPutAll: 'Avg DGR =' ;
+					nextPutAll: (dgrs avg round: 2) asString;
+					cr;
 					nextPutAll: dgrs asString.
 			].
 			container := BlElement new
@@ -178,13 +196,14 @@ Company >> industry: anObject [
 
 { #category : 'accessing' }
 Company >> interesting: aDictionary [
+
 	^ ppe < (aDictionary at: #ppe) and: [ 
 		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-			  	dgrs y3 + yield >= (aDictionary at: #divdgrsum) and: [
-				  	yield
-					  	between: (aDictionary at: #avgdiv) * 1.5
-					  	and: (aDictionary at: #avgdiv) * 5 ] ] ] ]
+				  (self growing: aDictionary) and: [ 
+					  yield
+						  between: (aDictionary at: #avgdiv) * 1.5
+						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -251,6 +270,16 @@ Company >> ticker [
 Company >> ticker: anObject [
 
 	ticker := anObject
+]
+
+{ #category : 'accessing' }
+Company >> years [
+	^ years
+]
+
+{ #category : 'accessing' }
+Company >> years: aNumber [
+	years := aNumber
 ]
 
 { #category : 'accessing' }
