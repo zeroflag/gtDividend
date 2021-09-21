@@ -196,14 +196,14 @@ Company >> industry: anObject [
 
 { #category : 'accessing' }
 Company >> interesting: aDictionary [
-
 	^ ppe < (aDictionary at: #ppe) and: [ 
+		years >= (aDictionary at: #years) and: [
 		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
 				  (self growing: aDictionary) and: [ 
 					  yield
 						  between: (aDictionary at: #avgdiv) * 1.5
-						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ]
+						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
