@@ -82,7 +82,7 @@ Sheet >> findByTicker: aString [
 { #category : 'accessing' }
 Sheet >> findValue: keyValues [
 	| sheet |
-	sheet :=  Sheet new setCompanies:(companies select: [:each | each interesting: keyValues asDictionary ] ).
+	sheet :=  Sheet new setCompanies:(companies select: [:each | each winner: keyValues asDictionary ] ).
 	sheet sortByYield.
 	^ sheet
 ]

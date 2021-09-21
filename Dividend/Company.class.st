@@ -19,6 +19,24 @@ Class {
 }
 
 { #category : 'accessing' }
+Company >> chowder1 [
+
+	^ dgrs y1 + yield
+]
+
+{ #category : 'accessing' }
+Company >> chowder3 [
+
+	^ dgrs y3 + yield
+]
+
+{ #category : 'accessing' }
+Company >> chowder5 [
+
+	^ dgrs y5 + yield
+]
+
+{ #category : 'accessing' }
 Company >> dgrs [
 
 	^ dgrs
@@ -78,108 +96,141 @@ Company >> fairValue: anObject [
 
 { #category : 'accessing' }
 Company >> growing: aDictionary [
-	^ (dgrs y1 + yield >= (aDictionary at: #divdgrsum)) or: [ dgrs y3 + yield >= (aDictionary at: #divdgrsum) ]
+	^ (self chowder1 >= (aDictionary at: #chowder1)) 
+		or: [ self chowder3 >= (aDictionary at: #chowder3) 
+		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ]
 ]
 
 { #category : 'accessing' }
 Company >> gtView: aView [
+
 	<gtView>
 	^ aView explicit
-		title: name;
-		priority: 1;
-		stencil: [
-			| container verticalContainer detailsTextContainer nameTextContainer details |
-			details := String streamContents: [:s |
-				s 
-					nextPutAll: industry;
-					cr;
-					nextPutAll: fairValue;
-					cr;
-					nextPutAll: 'Since ';
-					nextPutAll: years asString, ' years';					
-					cr; cr;
-					nextPutAll: 'Dividend = ';
-					nextPutAll: yield asString;
-					nextPutAll: '% (';
-					nextPutAll: div asString;
-					nextPutAll: '$ / share)';
-					cr;
-					nextPutAll: 'Price = ';
-					nextPutAll: price asString;
-					cr;
-					nextPutAll: 'Gordon Fair price = '; 
-					nextPutAll: (self fairPrice round: 2) asString;
-					cr;			
-					nextPutAll: 'GY1 = ';
-					nextPutAll: ((dgrs y1 + yield) round: 1) asString;
-					cr;
-					nextPutAll: 'GY3 = ';
-					nextPutAll: ((dgrs y3 + yield) round:1) asString;					
-					cr;
-					nextPutAll: 'P/E = '; 
-					nextPutAll: ppe asString;
-					cr; cr;
-					nextPutAll: 'EPS 1Y = ';
-					nextPutAll: eps asString;
-					cr;
-					nextPutAll: 'Current Div = ';
-					nextPutAll: div asString;
-					cr;
-					nextPutAll: 'Payouts per year = ';
-					nextPutAll: payoutsPerYear asString;					
-					cr; cr;
-					nextPutAll: 'Div/EPS = ';
-					nextPutAll: ([ ((self dividendPerYearPerShare / eps) * 100 round: 2) asString ] on: ZeroDivide do: [ 'N/A ' ]);
-					nextPut: $%;
-					cr; cr;
-					nextPutAll: 'Avg DGR =' ;
-					nextPutAll: (dgrs avg round: 2) asString;
-					cr;
-					nextPutAll: dgrs asString.
-			].
-			container := BlElement new
-				layout: BlLinearLayout horizontal;
-				background: Color white;
-				aptitude: BrShadowAptitude;
-				margin: (BlInsets all: 20);
-				constraintsDo: [ :c | 
-					c horizontal fitContent.
-					c vertical fitContent].
-			nameTextContainer := BlTextElement new
-				constraintsDo: [ :c | c horizontal matchParent ];
-				margin: (BlInsets top: 5 right: 0 bottom: 20 left: 5);
-				text: ((name, '(', ticker, ')' ) asRopedText glamorousRegularFont
-					fontSize: 30;
-					foreground: Color black).
-			detailsTextContainer := BrEditor new
-				aptitude: (BrGlamorousRegularEditorAptitude new fontSize: 16);
-				text: details;
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent ].
-			verticalContainer := BlElement new
-				layout: BlLinearLayout vertical;
-				margin: (BlInsets all: 10);
-				constraintsDo: [ :c | 
-					c horizontal matchParent.
-					c vertical matchParent].
-			verticalContainer addChild: nameTextContainer.
-			verticalContainer addChild: detailsTextContainer.
-			container addChild: verticalContainer.
-			container
-		];		
-		actionButtonIcon: BrGlamorousVectorIcons note 
-			tooltip: 'Yahoo' 
-			action: [ :aToggle :company | WebBrowser openOn: 'https://finance.yahoo.com/quote/',(ticker copyReplaceAll: '.' with: ''), '/key-statistics?p=', ticker ];
-		actionButtonIcon: BrGlamorousVectorIcons performance 
-			tooltip: 'Dividend %' 
-			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield') ];			
-		actionButtonIcon: BrGlamorousVectorIcons up 
-			tooltip: 'Total Annual Dividend' 
-			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/total_stock_dividends_paid_annual') ];
-		actionButtonIcon: BrGlamorousVectorIcons down 
-			tooltip: 'FCF Annual' 
-			action: [ :aToggle :company | WebBrowser openOn: ('http://ycharts.com/companies/' , (ticker copyReplaceAll: '.' with: '') , '/free_cash_flow_annual') ].			
+		  title: name;
+		  priority: 1;
+		  stencil: [ 
+			  | container verticalContainer detailsTextContainer nameTextContainer details |
+			  details := String streamContents: [ :s | 
+					             s
+						             nextPutAll: industry;
+						             cr;
+						             nextPutAll: fairValue;
+						             cr;
+						             nextPutAll: 'Since ';
+						             nextPutAll: years asString , ' years';
+						             cr;
+						             cr;
+						             nextPutAll: 'Dividend = ';
+						             nextPutAll: yield asString;
+						             nextPutAll: '% (';
+						             nextPutAll: div asString;
+						             nextPutAll: '$ / share)';
+						             cr;
+						             nextPutAll: 'Price = ';
+						             nextPutAll: price asString;
+						             cr;
+						             nextPutAll: 'Gordon Fair price = ';
+						             nextPutAll: (self fairPrice round: 2) asString;
+						             cr; cr;
+						             nextPutAll: 'Chowder Score 1 = ';
+						             nextPutAll: (self chowder1 round: 1) asString;
+						             cr;
+						             nextPutAll: 'Chowder Score 3 = ';
+						             nextPutAll: (self chowder3 round: 1) asString;
+						             cr;
+						             nextPutAll: 'Chowder Score 5 = ';
+						             nextPutAll: (self chowder5 round: 1) asString;
+						             cr; cr;
+						             nextPutAll: 'P/E = ';
+						             nextPutAll: ppe asString;
+						             cr;
+						             cr;
+						             nextPutAll: 'EPS 1Y = ';
+						             nextPutAll: eps asString;
+						             cr;
+						             nextPutAll: 'Current Div = ';
+						             nextPutAll: div asString;
+						             cr;
+						             nextPutAll: 'Payouts per year = ';
+						             nextPutAll: payoutsPerYear asString;
+						             cr;
+						             cr;
+						             nextPutAll: 'Div/EPS = ';
+						             nextPutAll:
+							             ([ 
+							              (self dividendPerYearPerShare / eps * 100 round:
+									               2) asString ]
+								              on: ZeroDivide
+								              do: [ 'N/A ' ]);
+						             nextPut: $%;
+						             cr;
+						             cr;
+						             nextPutAll: 'Avg DGR =';
+						             nextPutAll: (dgrs avg round: 2) asString;
+						             cr;
+						             nextPutAll: dgrs asString ].
+			  container := BlElement new
+				               layout: BlLinearLayout horizontal;
+				               background: Color white;
+				               aptitude: BrShadowAptitude;
+				               margin: (BlInsets all: 20);
+				               constraintsDo: [ :c | 
+					               c horizontal fitContent.
+					               c vertical fitContent ].
+			  nameTextContainer := BlTextElement new
+				                       constraintsDo: [ :c | 
+					                       c horizontal matchParent ];
+				                       margin: (BlInsets
+						                        top: 5
+						                        right: 0
+						                        bottom: 20
+						                        left: 5);
+				                       text:
+					                       ((name , '(' , ticker , ')') asRopedText
+						                        glamorousRegularFont
+						                        fontSize: 30;
+						                        foreground: Color black).
+			  detailsTextContainer := BrEditor new
+				                          aptitude:
+					                          (BrGlamorousRegularEditorAptitude new 
+						                           fontSize: 16);
+				                          text: details;
+				                          constraintsDo: [ :c | 
+					                          c horizontal matchParent.
+					                          c vertical matchParent ].
+			  verticalContainer := BlElement new
+				                       layout: BlLinearLayout vertical;
+				                       margin: (BlInsets all: 10);
+				                       constraintsDo: [ :c | 
+					                       c horizontal matchParent.
+					                       c vertical matchParent ].
+			  verticalContainer addChild: nameTextContainer.
+			  verticalContainer addChild: detailsTextContainer.
+			  container addChild: verticalContainer.
+			  container ];
+		  actionButtonIcon: BrGlamorousVectorIcons note
+		  tooltip: 'Yahoo'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'https://finance.yahoo.com/quote/'
+				  , (ticker copyReplaceAll: '.' with: '') , '/key-statistics?p='
+				  , ticker ];
+		  actionButtonIcon: BrGlamorousVectorIcons performance
+		  tooltip: 'Dividend %'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'http://ycharts.com/companies/'
+				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ];
+		  actionButtonIcon: BrGlamorousVectorIcons up
+		  tooltip: 'Total Annual Dividend'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'http://ycharts.com/companies/'
+				  , (ticker copyReplaceAll: '.' with: '')
+				  , '/total_stock_dividends_paid_annual' ];
+		  actionButtonIcon: BrGlamorousVectorIcons down
+		  tooltip: 'FCF Annual'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'http://ycharts.com/companies/'
+				  , (ticker copyReplaceAll: '.' with: '')
+				  , '/free_cash_flow_annual' ]
 ]
 
 { #category : 'accessing' }
@@ -192,18 +243,6 @@ Company >> industry [
 Company >> industry: anObject [
 
 	industry := anObject
-]
-
-{ #category : 'accessing' }
-Company >> interesting: aDictionary [
-	^ ppe < (aDictionary at: #ppe) and: [ 
-		years >= (aDictionary at: #years) and: [
-		  (dgrs stable: aDictionary) and: [ 
-			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-				  (self growing: aDictionary) and: [ 
-					  yield
-						  between: (aDictionary at: #avgdiv) * 1.5
-						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -270,6 +309,18 @@ Company >> ticker [
 Company >> ticker: anObject [
 
 	ticker := anObject
+]
+
+{ #category : 'accessing' }
+Company >> winner: aDictionary [
+	^ ppe < (aDictionary at: #ppe) and: [ 
+		years >= (aDictionary at: #years) and: [
+		  (dgrs stable: aDictionary) and: [ 
+			  (dgrs above: (aDictionary at: #inflation)) and: [ 
+				  (self growing: aDictionary) and: [ 
+					  yield
+						  between: (aDictionary at: #avgdiv) * 1.5
+						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]
 ]
 
 { #category : 'accessing' }
