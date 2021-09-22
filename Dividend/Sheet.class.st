@@ -120,6 +120,11 @@ Sheet >> sort: aBlock [
 ]
 
 { #category : 'accessing' }
+Sheet >> sortByYears [
+	self sort:[:a :b | a years > b years ].
+]
+
+{ #category : 'accessing' }
 Sheet >> sortByYield [
 	self sort:[:a :b| a yield > b yield ].
 ]
