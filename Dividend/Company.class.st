@@ -13,7 +13,8 @@ Class {
 		'div',
 		'payoutsPerYear',
 		'price',
-		'years'
+		'years',
+		'dividendHistory'
 	],
 	#category : 'Dividend'
 }
@@ -37,6 +38,13 @@ Company >> chowder5 [
 ]
 
 { #category : 'accessing' }
+Company >> chowderGood: aDictionary [
+	^ (self chowder1 >= (aDictionary at: #chowder1)) 
+		or: [ self chowder3 >= (aDictionary at: #chowder3) 
+		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ]
+]
+
+{ #category : 'accessing' }
 Company >> dgrs [
 
 	^ dgrs
@@ -56,6 +64,12 @@ Company >> div [
 { #category : 'accessing' }
 Company >> div: aNumber [
 	div := aNumber
+]
+
+{ #category : 'accessing' }
+Company >> dividendHistory [
+	^ dividendHistory := dividendHistory ifNil: [ Yahoo new dividendHistory: self ticker ]
+	
 ]
 
 { #category : 'accessing' }
@@ -95,18 +109,43 @@ Company >> fairValue: anObject [
 ]
 
 { #category : 'accessing' }
-Company >> growing: aDictionary [
-	^ (self chowder1 >= (aDictionary at: #chowder1)) 
-		or: [ self chowder3 >= (aDictionary at: #chowder3) 
-		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ]
+Company >> flawlessDividendHistory [
+	^ ((self dividendHistory overlappingPairsCollect: [:a :b | a key > b key ]) includes: false) not
 ]
 
 { #category : 'accessing' }
-Company >> gtView: aView [
+Company >> gtDividendHistoryPlotOn: aView [	
+	<gtView>
+	| data sum |
+	^ aView explicit
+		title: 'Dividend plot';
+		priority: 3;
+		stencil: [
+			ExpensePlot new
+				data: self dividendHistory ;
+				x: [:each | each key asSeconds];
+				y: #value;
+				plot
+			].
+]
+
+{ #category : 'accessing' }
+Company >> gtViewDividendListOn: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Dividend history';
+		priority: 10;
+		items: [ self dividendHistory ];
+		column: 'Date' text: #key;
+		column: 'Dividend' text: #value.
+]
+
+{ #category : 'accessing' }
+Company >> gtViewSummary: aView [
 
 	<gtView>
 	^ aView explicit
-		  title: name;
+		  title: 'Summary';
 		  priority: 1;
 		  stencil: [ 
 			  | container verticalContainer detailsTextContainer nameTextContainer details |
@@ -124,8 +163,7 @@ Company >> gtView: aView [
 						             nextPutAll: yield asString;
 						             nextPutAll: '% (';
 						             nextPutAll: div asString;
-						             nextPutAll: '$ / share)';
-						             cr;
+						             nextPutAll: '$ / share)';					           
 						             nextPutAll: 'Price = ';
 						             nextPutAll: price asString;
 						             cr;
@@ -312,12 +350,12 @@ Company >> ticker: anObject [
 ]
 
 { #category : 'accessing' }
-Company >> winner: aDictionary [
+Company >> valueable: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
 		years >= (aDictionary at: #years) and: [
 		  (dgrs stable: aDictionary) and: [ 
 			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-				  (self growing: aDictionary) and: [ 
+				  (self chowderGood: aDictionary) and: [ 
 					  yield
 						  between: (aDictionary at: #avgdiv) * 1.5
 						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]

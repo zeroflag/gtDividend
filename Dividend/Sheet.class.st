@@ -58,7 +58,7 @@ Sheet >> example [
 	<gtExample>
 	| sheet |
 	sheet := Sheet fromFile: '/Users/amagyar/Downloads/champs.csv'.
-	sheet findValue: {
+	sheet findValueable: {
 		#ppe -> 38 . 
 		#inflation -> 1.28. 
 		#yield -> 2.  "Avg SNP500 dividends https://www.multpl.com/s-p-500-dividend-yield"
@@ -80,9 +80,9 @@ Sheet >> findByTicker: aString [
 ]
 
 { #category : 'accessing' }
-Sheet >> findValue: keyValues [
+Sheet >> findValueable: keyValues [
 	| sheet |
-	sheet :=  Sheet new setCompanies:(companies select: [:each | each winner: keyValues asDictionary ] ).
+	sheet :=  Sheet new setCompanies:(companies select: [:each | each valueable: keyValues asDictionary ] ).
 	sheet sortByYield.
 	^ sheet
 ]
