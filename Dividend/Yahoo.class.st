@@ -20,12 +20,12 @@ Yahoo >> dividendHistory: ticker [
 			? ('events' -> 'div')
 			? ('includeAdjustedClose' -> 'true')).
 					
-	^ self parseDividendHistory: response
+	^ self parseHistory: response
 	
 ]
 
 { #category : 'accessing' }
-Yahoo >> parseDividendHistory: aString [
+Yahoo >> parseHistory: aString [
 	| csv date dividend history |
 	csv := CSVParser parse: aString.
 	history := csv lines allButFirst collect: [:line | 
@@ -35,4 +35,19 @@ Yahoo >> parseDividendHistory: aString [
 	history sort: [:a :b | a key > b key ].
 	^ history
 	 
+]
+
+{ #category : 'accessing' }
+Yahoo >> priceHistory: ticker [
+	| response |
+	response := ZnClient new get:(
+		self baseUrl / ticker 
+			? ('period1' -> '221097600')
+			? ('period2' -> DateAndTime now asUnixTime)
+			? ('interval' -> '1mo')
+			? ('events' -> 'history')
+			? ('includeAdjustedClose' -> 'true')).
+					
+	^ self parseHistory: response
+	
 ]

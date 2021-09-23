@@ -42,14 +42,6 @@ HistoryPlot >> data: aCollection [
 ]
 
 { #category : 'private' }
-HistoryPlot >> dot: aPoint [
-	canvas fill
-		path: (canvas shape circleAt: aPoint radius: 1);
-		paint: lineColor;
-		draw. 
-]
-
-{ #category : 'private' }
 HistoryPlot >> drawAxis [
 	| axis text metrics |
 	axis := canvas path
@@ -83,7 +75,7 @@ HistoryPlot >> drawLabels [
 	| xLabel xMetrics |
 	xLabel := canvas text
 		paint: axisColor;
-		string: 'Date xx';
+		string: 'Date';
 		font: font.
 	xMetrics := xLabel measure.
 	xLabel
@@ -101,7 +93,6 @@ HistoryPlot >> drawPoints [
 		x := self translateX: (xs at: i).
 		y := self translateY: (ys at: i).
 		prior ifNotNil: [ self connect: prior to: x@y ].
-		self dot: x@y.
 		prior := x@y.
 	].
 ]
@@ -115,7 +106,6 @@ HistoryPlot >> initialize [
 	y0 := 50.
 	lineColor := Color fromHexString: '#459394'.
 	axisColor := Color fromHexString: '#606060'.
-	budgetColor := Color red.
 	yTick := 50000.
 	xTick := 7 days asSeconds.
 

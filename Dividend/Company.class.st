@@ -14,7 +14,8 @@ Class {
 		'payoutsPerYear',
 		'price',
 		'years',
-		'dividendHistory'
+		'dividendHistory',
+		'priceHistory'
 	],
 	#category : 'Dividend'
 }
@@ -119,10 +120,26 @@ Company >> gtDividendHistoryPlotOn: aView [
 	| data sum |
 	^ aView explicit
 		title: 'Dividend plot';
+		priority: 5;
+		stencil: [
+			HistoryPlot new
+				data: self dividendHistory ;
+				x: [:each | each key asSeconds];
+				y: #value;
+				plot
+			].
+]
+
+{ #category : 'accessing' }
+Company >> gtPriceHistoryPlotOn: aView [	
+	<gtView>
+	| data sum |
+	^ aView explicit
+		title: 'Price plot';
 		priority: 3;
 		stencil: [
-			ExpensePlot new
-				data: self dividendHistory ;
+			HistoryPlot new
+				data: self priceHistory ;
 				x: [:each | each key asSeconds];
 				y: #value;
 				plot
@@ -134,10 +151,21 @@ Company >> gtViewDividendListOn: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Dividend history';
-		priority: 10;
+		priority: 4;
 		items: [ self dividendHistory ];
 		column: 'Date' text: #key;
 		column: 'Dividend' text: #value.
+]
+
+{ #category : 'accessing' }
+Company >> gtViewPriceListOn: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Price history';
+		priority: 2;
+		items: [ self priceHistory ];
+		column: 'Date' text: #key;
+		column: 'Price' text: #value.
 ]
 
 { #category : 'accessing' }
@@ -330,6 +358,12 @@ Company >> price [
 { #category : 'accessing' }
 Company >> price: aNumber [
 	price := aNumber
+]
+
+{ #category : 'accessing' }
+Company >> priceHistory [
+	^ priceHistory := priceHistory ifNil: [ Yahoo new priceHistory: self ticker ]
+	
 ]
 
 { #category : 'accessing' }
