@@ -44,7 +44,7 @@ Yahoo >> priceHistory: ticker [
 		self baseUrl / ticker 
 			? ('period1' -> '221097600')
 			? ('period2' -> DateAndTime now asUnixTime)
-			? ('interval' -> '1mo')
+			? ('interval' -> '1d')
 			? ('events' -> 'history')
 			? ('includeAdjustedClose' -> 'true')).
 					

@@ -79,6 +79,23 @@ Company >> dividendPerYearPerShare [
 ]
 
 { #category : 'accessing' }
+Company >> dividendYieldHistory [
+	| divs prices result index date divident |
+	prices := self priceHistory.
+	result := OrderedCollection new.
+	self dividendHistory do: [ :kw |
+		date := kw key.
+		divident := kw value * payoutsPerYear. "TODO: unaccurate, should calculate divident per year"
+		index := prices findFirst: [ :each | each key = date ].
+		index > 0 ifTrue: [ 
+			price := (prices at: index) value.
+			price = 0 ifFalse: [result add: date -> ((divident / price * 100) round: 1) ].
+		]
+	].
+	^ result
+]
+
+{ #category : 'accessing' }
 Company >> eps [
 	^ eps
 ]
@@ -297,6 +314,33 @@ Company >> gtViewSummary: aView [
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
 				  , (ticker copyReplaceAll: '.' with: '')
 				  , '/free_cash_flow_annual' ]
+]
+
+{ #category : 'accessing' }
+Company >> gtViewYieldListOn: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Yield history';
+		priority: 5;
+		items: [ self dividendYieldHistory ];
+		column: 'Date' text: #key;
+		column: 'Yield' text: #value.
+]
+
+{ #category : 'accessing' }
+Company >> gtYieldHistoryPlotOn: aView [	
+	<gtView>
+	| data sum |
+	^ aView explicit
+		title: 'Yield plot';
+		priority: 7;
+		stencil: [
+			HistoryPlot new
+				data: self dividendYieldHistory ;
+				x: [:each | each key asSeconds];
+				y: #value;
+				plot
+			].
 ]
 
 { #category : 'accessing' }
