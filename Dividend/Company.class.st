@@ -21,6 +21,11 @@ Class {
 }
 
 { #category : 'accessing' }
+Company >> averageDividentYield5y [
+	^ (self dividendYieldHistory5y collect: #value) average
+]
+
+{ #category : 'accessing' }
 Company >> chowder1 [
 
 	^ dgrs y1 + yield
@@ -79,19 +84,17 @@ Company >> dividendPerYearPerShare [
 ]
 
 { #category : 'accessing' }
-Company >> dividendYieldHistory [
+Company >> dividendYieldHistory5y [
 	| divs prices result index date divident |
 	prices := self priceHistory.
 	result := OrderedCollection new.
-	self dividendHistory do: [ :kw |
+	self priceHistory5years do: [ :kw | 
 		date := kw key.
-		divident := kw value * payoutsPerYear. "TODO: unaccurate, should calculate divident per year"
-		index := prices findFirst: [ :each | each key = date ].
+		price := kw value.
+		index := self dividendHistory findFirst: [ :d | d key <= date ].
 		index > 0 ifTrue: [ 
-			price := (prices at: index) value.
-			price = 0 ifFalse: [result add: date -> ((divident / price * 100) round: 1) ].
-		]
-	].
+			divident := (self dividendHistory at: index) value * payoutsPerYear. "TODO calculate annual divident"
+			result add: date -> (divident / price * 100 round: 1) ] ].
 	^ result
 ]
 
@@ -136,7 +139,7 @@ Company >> gtDividendHistoryPlotOn: aView [
 	<gtView>
 	| data sum |
 	^ aView explicit
-		title: 'Dividend plot';
+		title: 'Div plot';
 		priority: 5;
 		stencil: [
 			HistoryPlot new
@@ -167,7 +170,7 @@ Company >> gtPriceHistoryPlotOn: aView [
 Company >> gtViewDividendListOn: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Dividend history';
+		title: 'Div';
 		priority: 4;
 		items: [ self dividendHistory ];
 		column: 'Date' text: #key;
@@ -178,7 +181,7 @@ Company >> gtViewDividendListOn: aView [
 Company >> gtViewPriceListOn: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Price history';
+		title: 'Price';
 		priority: 2;
 		items: [ self priceHistory ];
 		column: 'Date' text: #key;
@@ -320,9 +323,9 @@ Company >> gtViewSummary: aView [
 Company >> gtViewYieldListOn: aView [
 	<gtView>
 	^ aView columnedList
-		title: 'Yield history';
+		title: '5y-div%';
 		priority: 5;
-		items: [ self dividendYieldHistory ];
+		items: [ self dividendYieldHistory5y ];
 		column: 'Date' text: #key;
 		column: 'Yield' text: #value.
 ]
@@ -330,16 +333,27 @@ Company >> gtViewYieldListOn: aView [
 { #category : 'accessing' }
 Company >> gtYieldHistoryPlotOn: aView [	
 	<gtView>
-	| data sum |
+	| data sum plot container details |
 	^ aView explicit
-		title: 'Yield plot';
+		title: '5y-div% plot';
 		priority: 7;
 		stencil: [
-			HistoryPlot new
-				data: self dividendYieldHistory ;
-				x: [:each | each key asSeconds];
+			plot := HistoryPlot new
+				data: self dividendYieldHistory5y ;
+				x: [ :each | each key asSeconds ];
 				y: #value;
-				plot
+				plot.	
+			 details := BrEditor new
+				 aptitude: (BrGlamorousRegularEditorAptitude new fontSize: 16);
+				 	text: '5 years average: ',(self averageDividentYield5y round: 1) asString, ' Current: ', yield asString;
+				     constraintsDo: [ :c | c horizontal matchParent. c vertical matchParent ].				
+			container := BlElement new
+					layout: BlLinearLayout vertical;
+					margin: (BlInsets all: 10);
+						constraintsDo: [ :c | c horizontal matchParent. c vertical matchParent ].
+			 container addChild: plot asElement.
+			 container addChild: details.
+			 container
 			].
 ]
 
@@ -408,6 +422,12 @@ Company >> price: aNumber [
 Company >> priceHistory [
 	^ priceHistory := priceHistory ifNil: [ Yahoo new priceHistory: self ticker ]
 	
+]
+
+{ #category : 'accessing' }
+Company >> priceHistory5years [
+	^ self priceHistory select: [ :each | 
+		  each key year > (Date today year - 5) ]
 ]
 
 { #category : 'accessing' }

@@ -100,8 +100,8 @@ HistoryPlot >> drawPoints [
 { #category : 'initialization' }
 HistoryPlot >> initialize [
 	super initialize.
-	totalWidth := 600 asFloat.
-	totalHeight := 500 asFloat.
+	totalWidth := 750 asFloat.
+	totalHeight := 450 asFloat.
 	x0 := 50.
 	y0 := 50.
 	lineColor := Color fromHexString: '#459394'.
