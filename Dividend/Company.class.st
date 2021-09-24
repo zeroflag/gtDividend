@@ -345,7 +345,7 @@ Company >> gtYieldHistoryPlotOn: aView [
 				plot.	
 			 details := BrEditor new
 				 aptitude: (BrGlamorousRegularEditorAptitude new fontSize: 16);
-				 	text: '5 years average: ',(self averageDividentYield5y round: 1) asString, ' Current: ', yield asString;
+				 	text: 'AVG-Y5 = ',(self averageDividentYield5y round: 1) asString, '% Current = ', yield asString, '%';
 				     constraintsDo: [ :c | c horizontal matchParent. c vertical matchParent ].				
 			container := BlElement new
 					layout: BlLinearLayout vertical;
