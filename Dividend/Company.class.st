@@ -47,7 +47,7 @@ Company >> chowder5 [
 Company >> chowderGood: aDictionary [
 	^ (self chowder1 >= (aDictionary at: #chowder1)) 
 		or: [ self chowder3 >= (aDictionary at: #chowder3) 
-		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ]
+		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ] "<- ez"
 ]
 
 { #category : 'accessing' }
