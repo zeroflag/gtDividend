@@ -309,19 +309,7 @@ Company >> gtViewSummary: aView [
 		  tooltip: 'Dividend %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ];
-		  actionButtonIcon: BrGlamorousVectorIcons up
-		  tooltip: 'Total Annual Dividend'
-		  action: [ :aToggle :company | 
-			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '')
-				  , '/total_stock_dividends_paid_annual' ];
-		  actionButtonIcon: BrGlamorousVectorIcons down
-		  tooltip: 'FCF Annual'
-		  action: [ :aToggle :company | 
-			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '')
-				  , '/free_cash_flow_annual' ]
+				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ]
 ]
 
 { #category : 'accessing' }

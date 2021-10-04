@@ -59,12 +59,16 @@ Sheet >> example [
 	| sheet |
 	sheet := Sheet fromFile: '/Users/amagyar/Downloads/champs.csv'.
 	sheet findValueable: {
-		#ppe -> 38 . 
-		#inflation -> 1.28. 
-		#yield -> 2.  "Avg SNP500 dividends https://www.multpl.com/s-p-500-dividend-yield"
-		#slope -> -0.15 .
+		#ppe -> 25. 
+		#inflation -> 2. 
+		#avgdiv -> 2.6.  "s&p500 average"
+		#slope -> -0.5.
+		#chowder1 -> 9. 
+		#chowder3 -> 9. 
+		#chowder5 -> 12. 		
+		#dgrhi -> 12.
+		#years -> ((Date today year - 2008)).
 	}.
-	
 	"Additional checks:
 		* Starting dividends yield is above average (in 5 years)
 		* Annual total dividends paid / Annual free casheflow < 75%
