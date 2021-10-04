@@ -294,6 +294,11 @@ Company >> gtViewSummary: aView [
 			  verticalContainer addChild: detailsTextContainer.
 			  container addChild: verticalContainer.
 			  container ];
+				  actionButtonIcon: BrGlamorousVectorIcons link
+		  tooltip: 'Market watch'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'https://www.marketwatch.com/investing/stock/'
+				  , (ticker copyReplaceAll: '.' with: ''), '/financials/cash-flow' ];	  
 		  actionButtonIcon: BrGlamorousVectorIcons note
 		  tooltip: 'Yahoo'
 		  action: [ :aToggle :company | 
