@@ -1,6 +1,6 @@
 Class {
-	#name : 'HistoryPlot',
-	#superclass : 'Object',
+	#name : #HistoryPlot,
+	#superclass : #Object,
 	#instVars : [
 		'data',
 		'xBlock',
@@ -26,7 +26,7 @@ Class {
 	#category : 'Dividend'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> connect: point1 to: point2 [
 	canvas stroke
 		path: (canvas path moveTo: point1; lineTo: point2; finish);
@@ -36,12 +36,12 @@ HistoryPlot >> connect: point1 to: point2 [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HistoryPlot >> data: aCollection [
 	data := aCollection
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> drawAxis [
 	| axis text metrics |
 	axis := canvas path
@@ -58,7 +58,7 @@ HistoryPlot >> drawAxis [
 		draw.		
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> drawBackground [
 	canvas fill
 		path: (0@0 extent: (width+2*x0)@(height + 2*y0));
@@ -70,7 +70,7 @@ HistoryPlot >> drawBackground [
 		draw.	
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> drawLabels [
 	| xLabel xMetrics |
 	xLabel := canvas text
@@ -85,7 +85,7 @@ HistoryPlot >> drawLabels [
 		draw
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> drawPoints [
 	| prior |
 	1 to: data size do: [:i |
@@ -97,7 +97,7 @@ HistoryPlot >> drawPoints [
 	].
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 HistoryPlot >> initialize [
 	super initialize.
 	totalWidth := 750 asFloat.
@@ -111,12 +111,12 @@ HistoryPlot >> initialize [
 
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> lastDate [
 	^ Date fromSeconds: xs last
 ]
 
-{ #category : 'plot' }
+{ #category : #plot }
 HistoryPlot >> plot [
 	data ifEmpty: [ ^ (SkiaCanvas extent:0@0) asForm ].
 	
@@ -142,32 +142,32 @@ HistoryPlot >> plot [
 
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> translateX: x [ 
 	^ [ (x - xmin) * width / (xmax - xmin) + x0 ] on: ZeroDivide do: [ x0 ]
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 HistoryPlot >> translateY: y [
 	^ y0 + height - (y * height / ymax)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HistoryPlot >> x: aBlock [
 	xBlock := aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HistoryPlot >> xTick: aNumber [
 	xTick := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HistoryPlot >> y: aBlock [
 	yBlock := aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 HistoryPlot >> yTick: aNumber [
 	yTick := aNumber.
 ]

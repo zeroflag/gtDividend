@@ -1,15 +1,15 @@
 Class {
-	#name : 'Yahoo',
-	#superclass : 'Object',
+	#name : #Yahoo,
+	#superclass : #Object,
 	#category : 'Dividend-Dividend'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Yahoo >> baseUrl [
 	^ 'https://query1.finance.yahoo.com/v7/finance/download' asUrl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Yahoo >> dividendHistory: ticker [
 	| response |
 	response := ZnClient new get:(
@@ -24,7 +24,7 @@ Yahoo >> dividendHistory: ticker [
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Yahoo >> parseHistory: aString [
 	| csv date dividend history |
 	csv := CSVParser parse: aString.
@@ -37,7 +37,7 @@ Yahoo >> parseHistory: aString [
 	 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Yahoo >> priceHistory: ticker [
 	| response |
 	response := ZnClient new get:(

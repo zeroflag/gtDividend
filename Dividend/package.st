@@ -1,1 +1,1 @@
-Package { #name : 'Dividend' }
+Package { #name : #Dividend }

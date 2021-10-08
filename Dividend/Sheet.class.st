@@ -1,18 +1,18 @@
 Class {
-	#name : 'Sheet',
-	#superclass : 'Object',
+	#name : #Sheet,
+	#superclass : #Object,
 	#instVars : [
 		'companies'
 	],
 	#category : 'Dividend-Dividend'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet class >> fromFile: path [
 	^ path asFileReference readStreamDo: [:stream | self fromString: stream contents ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet class >> fromString: aString [ 
 	| csv header candidates |
 	csv := CSVParser parse: aString.
@@ -48,12 +48,12 @@ Sheet class >> fromString: aString [
 	^ self new setCompanies: candidates
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> all [ 
 	^ Sheet new setCompanies:companies
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> example [
 	<gtExample>
 	| sheet |
@@ -78,12 +78,12 @@ Sheet >> example [
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> findByTicker: aString [ 
 	^ companies detect: [:each | each ticker = aString] ifNone: [ nil ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> findValueable: keyValues [
 	| sheet |
 	sheet :=  Sheet new setCompanies:(companies select: [:each | each valueable: keyValues asDictionary ] ).
@@ -91,7 +91,7 @@ Sheet >> findValueable: keyValues [
 	^ sheet
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> gtListOn: aView [
 	<gtView>
 	^ aView columnedList
@@ -107,28 +107,28 @@ Sheet >> gtListOn: aView [
 		column: 'Avg DGR' text: [:c | c dgrs avg round: 1 ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> select: aBlock [
 	^ Sheet new setCompanies: (companies select: aBlock)
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> setCompanies: anOrderedCollection [ 
 	companies := anOrderedCollection sort: [:a :b | a name < b name ].
 	^ self
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> sort: aBlock [
 	companies sort: aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> sortByYears [
 	self sort:[:a :b | a years > b years ].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Sheet >> sortByYield [
 	self sort:[:a :b| a yield > b yield ].
 ]

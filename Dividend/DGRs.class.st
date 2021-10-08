@@ -1,6 +1,6 @@
 Class {
-	#name : 'DGRs',
-	#superclass : 'Object',
+	#name : #DGRs,
+	#superclass : #Object,
 	#instVars : [
 		'y1',
 		'y10',
@@ -10,12 +10,12 @@ Class {
 	#category : 'Dividend-Dividend'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> above: aNumber [
 	^ self asOrderedCollection allSatisfy: [:each | each > aNumber ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> asOrderedCollection [
 	| o |
 	o := OrderedCollection new.
@@ -26,12 +26,12 @@ DGRs >> asOrderedCollection [
 	^ o
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> avg [
 	^ self asOrderedCollection average
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> printOn: aStream [
  aStream 
  	nextPutAll: y10 asString;
@@ -45,7 +45,7 @@ DGRs >> printOn: aStream [
  	nextPutAll: (self slope round: 2) asString
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> slope [
     | dgrs sxsy sx sy n sx2 |
 	dgrs := self asOrderedCollection.
@@ -59,7 +59,7 @@ DGRs >> slope [
 	^ ((n * sxsy) - (sx * sy)) / ((n * sx2) - (sx * sx))
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> stable: aDictionary [
 	(self asOrderedCollection anySatisfy: [:each | each > (aDictionary at: #dgrhi) ]) ifTrue: [ ^ true ].
 	^ aDictionary 
@@ -68,49 +68,49 @@ DGRs >> stable: aDictionary [
 		ifAbsent: [ true ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y1 [
 
 	^ y1
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y10 [
 
 	^ y10
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y10: anObject [
 
 	y10 := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y1: anObject [
 
 	y1 := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y3 [
 
 	^ y3
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y3: anObject [
 
 	y3 := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y5 [
 
 	^ y5
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 DGRs >> y5: anObject [
 
 	y5 := anObject

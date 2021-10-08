@@ -1,6 +1,6 @@
 Class {
-	#name : 'Company',
-	#superclass : 'Object',
+	#name : #Company,
+	#superclass : #Object,
 	#instVars : [
 		'yield',
 		'dgrs',
@@ -17,73 +17,73 @@ Class {
 		'dividendHistory',
 		'priceHistory'
 	],
-	#category : 'Dividend'
+	#category : #Dividend
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> averageDividentYield5y [
 	^ (self dividendYieldHistory5y collect: #value) average
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> chowder1 [
 
 	^ dgrs y1 + yield
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> chowder3 [
 
 	^ dgrs y3 + yield
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> chowder5 [
 
 	^ dgrs y5 + yield
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> chowderGood: aDictionary [
 	^ (self chowder1 >= (aDictionary at: #chowder1)) 
 		or: [ self chowder3 >= (aDictionary at: #chowder3) 
 		or: [ self chowder5 >= (aDictionary at: #chowder5) ] ] "<- ez"
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> dgrs [
 
 	^ dgrs
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> dgrs: anObject [
 
 	dgrs := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> div [
 	^ div
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> div: aNumber [
 	div := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> dividendHistory [
 	^ dividendHistory := dividendHistory ifNil: [ Yahoo new dividendHistory: self ticker ]
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> dividendPerYearPerShare [
 	^ div * payoutsPerYear
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> dividendYieldHistory5y [
 	| divs prices result index date divident |
 	prices := self priceHistory.
@@ -98,17 +98,17 @@ Company >> dividendYieldHistory5y [
 	^ result
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> eps [
 	^ eps
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> eps: aNumber [
 	eps := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> fairPrice [
 	"https://www.investopedia.com/terms/g/gordongrowthmodel.asp"
 	"Because the model assumes a constant growth rate, it is generally only used for companies with stable growth rates in dividends per share."
@@ -117,24 +117,24 @@ Company >> fairPrice [
 	^ d > 0 ifTrue: [ self dividendPerYearPerShare / d  ] ifFalse: [ 0 ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> fairValue [
 
 	^ fairValue
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> fairValue: anObject [
 
 	fairValue := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> flawlessDividendHistory [
 	^ ((self dividendHistory overlappingPairsCollect: [:a :b | a key > b key ]) includes: false) not
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtDividendHistoryPlotOn: aView [	
 	<gtView>
 	| data sum |
@@ -150,7 +150,7 @@ Company >> gtDividendHistoryPlotOn: aView [
 			].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtPriceHistoryPlotOn: aView [	
 	<gtView>
 	| data sum |
@@ -166,7 +166,7 @@ Company >> gtPriceHistoryPlotOn: aView [
 			].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtViewDividendListOn: aView [
 	<gtView>
 	^ aView columnedList
@@ -177,7 +177,7 @@ Company >> gtViewDividendListOn: aView [
 		column: 'Dividend' text: #value.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtViewPriceListOn: aView [
 	<gtView>
 	^ aView columnedList
@@ -188,7 +188,7 @@ Company >> gtViewPriceListOn: aView [
 		column: 'Price' text: #value.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtViewSummary: aView [
 
 	<gtView>
@@ -211,7 +211,8 @@ Company >> gtViewSummary: aView [
 						             nextPutAll: yield asString;
 						             nextPutAll: '% (';
 						             nextPutAll: div asString;
-						             nextPutAll: '$ / share)';					           
+						             nextPutAll: '$ / share)';
+						             cr;					           
 						             nextPutAll: 'Price = ';
 						             nextPutAll: price asString;
 						             cr;
@@ -309,10 +310,15 @@ Company >> gtViewSummary: aView [
 		  tooltip: 'Dividend %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ]
+				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ];
+		  actionButtonIcon: BrGlamorousVectorIcons refresh
+		  tooltip: 'Dividend %'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'http://ycharts.com/companies/'
+				  , (ticker copyReplaceAll: '.' with: '') , '/pe_ratio' ]				  
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtViewYieldListOn: aView [
 	<gtView>
 	^ aView columnedList
@@ -323,7 +329,7 @@ Company >> gtViewYieldListOn: aView [
 		column: 'Yield' text: #value.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> gtYieldHistoryPlotOn: aView [	
 	<gtView>
 	| data sum plot container details |
@@ -350,97 +356,97 @@ Company >> gtYieldHistoryPlotOn: aView [
 			].
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> industry [
 
 	^ industry
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> industry: anObject [
 
 	industry := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> isReit [
 	^ industry includesSubstring: 'REIT'
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> name [
 
 	^ name
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> name: anObject [
 
 	name := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> payoutsPerYear [
 	^ payoutsPerYear
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> payoutsPerYear: aNumber [
 	payoutsPerYear := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> ppe [
 
 	^ ppe
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> ppe: anObject [
 
 	ppe := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> price [
 	^ price
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> price: aNumber [
 	price := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> priceHistory [
 	^ priceHistory := priceHistory ifNil: [ Yahoo new priceHistory: self ticker ]
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> priceHistory5years [
 	^ self priceHistory select: [ :each | 
 		  each key year > (Date today year - 5) ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> printOn: aStream [
  name printOn: aStream
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> ticker [
 
 	^ ticker
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> ticker: anObject [
 
 	ticker := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> valueable: aDictionary [
 	^ ppe < (aDictionary at: #ppe) and: [ 
 		years >= (aDictionary at: #years) and: [
@@ -452,23 +458,23 @@ Company >> valueable: aDictionary [
 						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> years [
 	^ years
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> years: aNumber [
 	years := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> yield [
 
 	^ yield
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 Company >> yield: anObject [
 
 	yield := anObject
