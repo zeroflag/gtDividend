@@ -23,7 +23,7 @@ Class {
 		'ys',
 		'font'
 	],
-	#category : 'Dividend'
+	#category : #Dividend
 }
 
 { #category : #private }
@@ -55,7 +55,65 @@ HistoryPlot >> drawAxis [
 		path: axis;
 		paint: axisColor;
 		width: 2;
-		draw.		
+		draw.
+		
+	0 to: ymax by: (ymax / 10) do: [:i |
+		| tick |
+		tick := canvas path
+			moveTo: (x0-3)@(self translateY: i);
+			lineTo: (x0+3)@(self translateY: i);			
+			close;
+			finish.
+		canvas stroke
+			path: tick;
+			paint: axisColor;
+			width: 1;
+			draw.						
+		text := canvas text
+			paint: axisColor;
+  		  string: (i round: 2) asString;
+  		  font: font.
+  	  metrics := text measure textMetrics.
+  	  text 
+		    baseline: (x0 - metrics width)@(self translateY: i) - 3;
+			draw.
+	].
+	
+	xmin to: xmax by: (xmax - xmin / 10) do: [:i |
+		| tick |
+		tick := canvas path
+			moveTo: (self translateX: i)@(height + y0-3);
+			lineTo: (self translateX: i)@(height + y0+3);		
+			close;
+			finish.
+		canvas stroke
+			path: tick;
+			paint: axisColor;
+			width: 1;
+			draw
+	].
+	xmin to: xmax by: (xmax - xmin / 10) do: [:i |
+		| tick |
+		tick := canvas path
+			moveTo: (self translateX: i)@(height + y0-3);
+			lineTo: (self translateX: i)@(height + y0+3);		
+			close;
+			finish.
+		canvas stroke
+			path: tick;
+			paint: axisColor;
+			width: 1;
+			draw.
+		text := canvas text
+			paint: axisColor;
+  		  string: (Date fromSeconds: i) ddmmyyyy;
+  		  font: font.
+  	  metrics := text measure textMetrics.
+  	  text 
+		    baseline: ((self translateX: i) - (metrics width / 2))@(height + y0 + metrics height  + 3);
+			draw.			
+	].	
+			
 ]
 
 { #category : #private }
@@ -68,21 +126,6 @@ HistoryPlot >> drawBackground [
 		path: (x0@y0 extent: width@height);
 		paint: (Color fromHexString: '#FDFDFD');
 		draw.	
-]
-
-{ #category : #private }
-HistoryPlot >> drawLabels [
-	| xLabel xMetrics |
-	xLabel := canvas text
-		paint: axisColor;
-		string: 'Date';
-		font: font.
-	xMetrics := xLabel measure.
-	xLabel
-		baseline:
-			(x0 + ((width - xMetrics textMetrics width) / 2.0))
-				@ (height + y0 + xMetrics textMetrics height + 3);
-		draw
 ]
 
 { #category : #private }
@@ -132,8 +175,7 @@ HistoryPlot >> plot [
 	canvas := SkiaCanvas extent: (width + (2*x0))@(height+(2*y0)).
 	font := canvas font size: 12; weightNormal; build.						
 	self drawBackground.
-	self drawAxis.	
-	self drawLabels.
+	self drawAxis.
 	self drawPoints.
 	
 	^ canvas 
