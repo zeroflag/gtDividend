@@ -298,8 +298,8 @@ Company >> gtViewSummary: aView [
 			  verticalContainer addChild: (HistoryPlot new
 			  		x0: 8;
 			  		y0: 8;
-			  		width: 150;
-			  		height: 100;
+			  		width: 120;
+			  		height: 80;
 					data: (dgrs asOrderedCollection collectWithIndex: [:each :i | i -> each]) ;
 					xLabel: [:each | ''];
 					yLabel: [:each | ''];
