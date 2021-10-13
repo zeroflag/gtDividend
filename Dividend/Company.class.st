@@ -51,6 +51,69 @@ Company >> chowderGood: aDictionary [
 ]
 
 { #category : #accessing }
+Company >> details [
+^ String streamContents: [ :s | 
+    s
+        nextPutAll: industry;
+        cr;
+        nextPutAll: fairValue;
+        cr;
+        nextPutAll: 'Since ';
+        nextPutAll: years asString , ' years';
+        cr;
+        cr;
+        nextPutAll: 'Dividend = ';
+        nextPutAll: yield asString;
+        nextPutAll: '% (';
+        nextPutAll: div asString;
+        nextPutAll: '$ / share)';
+        cr;					           
+        nextPutAll: 'Price = ';
+        nextPutAll: price asString;
+        cr;
+        nextPutAll: 'Gordon Fair price = ';
+        nextPutAll: (self fairPrice round: 2) asString;
+        cr; cr;
+        nextPutAll: 'Chowder Score 1 = ';
+        nextPutAll: (self chowder1 round: 1) asString;
+        cr;
+        nextPutAll: 'Chowder Score 3 = ';
+        nextPutAll: (self chowder3 round: 1) asString;
+        cr;
+        nextPutAll: 'Chowder Score 5 = ';
+        nextPutAll: (self chowder5 round: 1) asString;
+        cr; cr;
+        nextPutAll: 'P/E = ';
+        nextPutAll: ppe asString;
+        cr;
+        cr;
+        nextPutAll: 'EPS 1Y = ';
+        nextPutAll: eps asString;
+        cr;
+        nextPutAll: 'Current Div = ';
+        nextPutAll: div asString;
+        cr;
+        nextPutAll: 'Payouts per year = ';
+        nextPutAll: payoutsPerYear asString;
+        cr;
+        cr;
+        nextPutAll: 'Div/EPS = ';
+        nextPutAll:
+            ([ 
+            (self dividendPerYearPerShare / eps * 100 round:
+                    2) asString ]
+                on: ZeroDivide
+                do: [ 'N/A ' ]);
+        nextPut: $%;
+        cr;
+        cr;
+        nextPutAll: 'Avg DGR =';
+        nextPutAll: (dgrs avg round: 2) asString;
+        cr;
+        nextPutAll: dgrs asString ]                                   
+]
+
+{ #category : #accessing }
 Company >> dgrs [
 
 	^ dgrs
@@ -196,66 +259,7 @@ Company >> gtViewSummary: aView [
 		  title: 'Summary';
 		  priority: 1;
 		  stencil: [ 
-			  | container verticalContainer detailsTextContainer nameTextContainer details |
-			  details := String streamContents: [ :s | 
-					             s
-						             nextPutAll: industry;
-						             cr;
-						             nextPutAll: fairValue;
-						             cr;
-						             nextPutAll: 'Since ';
-						             nextPutAll: years asString , ' years';
-						             cr;
-						             cr;
-						             nextPutAll: 'Dividend = ';
-						             nextPutAll: yield asString;
-						             nextPutAll: '% (';
-						             nextPutAll: div asString;
-						             nextPutAll: '$ / share)';
-						             cr;					           
-						             nextPutAll: 'Price = ';
-						             nextPutAll: price asString;
-						             cr;
-						             nextPutAll: 'Gordon Fair price = ';
-						             nextPutAll: (self fairPrice round: 2) asString;
-						             cr; cr;
-						             nextPutAll: 'Chowder Score 1 = ';
-						             nextPutAll: (self chowder1 round: 1) asString;
-						             cr;
-						             nextPutAll: 'Chowder Score 3 = ';
-						             nextPutAll: (self chowder3 round: 1) asString;
-						             cr;
-						             nextPutAll: 'Chowder Score 5 = ';
-						             nextPutAll: (self chowder5 round: 1) asString;
-						             cr; cr;
-						             nextPutAll: 'P/E = ';
-						             nextPutAll: ppe asString;
-						             cr;
-						             cr;
-						             nextPutAll: 'EPS 1Y = ';
-						             nextPutAll: eps asString;
-						             cr;
-						             nextPutAll: 'Current Div = ';
-						             nextPutAll: div asString;
-						             cr;
-						             nextPutAll: 'Payouts per year = ';
-						             nextPutAll: payoutsPerYear asString;
-						             cr;
-						             cr;
-						             nextPutAll: 'Div/EPS = ';
-						             nextPutAll:
-							             ([ 
-							              (self dividendPerYearPerShare / eps * 100 round:
-									               2) asString ]
-								              on: ZeroDivide
-								              do: [ 'N/A ' ]);
-						             nextPut: $%;
-						             cr;
-						             cr;
-						             nextPutAll: 'Avg DGR =';
-						             nextPutAll: (dgrs avg round: 2) asString;
-						             cr;
-						             nextPutAll: dgrs asString ].
+			  | container verticalContainer detailsTextContainer nameTextContainer |
 			  container := BlElement new
 				               layout: BlLinearLayout horizontal;
 				               background: Color white;
@@ -281,7 +285,7 @@ Company >> gtViewSummary: aView [
 				                          aptitude:
 					                          (BrGlamorousRegularEditorAptitude new 
 						                           fontSize: 16);
-				                          text: details;
+				                          text: self details;
 				                          constraintsDo: [ :c | 
 					                          c horizontal matchParent.
 					                          c vertical matchParent ].
@@ -295,7 +299,7 @@ Company >> gtViewSummary: aView [
 			  verticalContainer addChild: detailsTextContainer.
 			  container addChild: verticalContainer.
 			  container ];
-				  actionButtonIcon: BrGlamorousVectorIcons link
+		  actionButtonIcon: BrGlamorousVectorIcons link
 		  tooltip: 'Market watch'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'https://www.marketwatch.com/investing/stock/'
@@ -306,16 +310,26 @@ Company >> gtViewSummary: aView [
 			  WebBrowser openOn: 'https://finance.yahoo.com/quote/'
 				  , (ticker copyReplaceAll: '.' with: '') , '/key-statistics?p='
 				  , ticker ];
+		  actionButtonIcon: BrGlamorousVectorIcons edit
+		  tooltip: 'Rating'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'https://www.fitchratings.com/search/?query=', name urlEncoded ];			  
 		  actionButtonIcon: BrGlamorousVectorIcons performance
 		  tooltip: 'Dividend %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
 				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ];
 		  actionButtonIcon: BrGlamorousVectorIcons refresh
-		  tooltip: 'Dividend %'
+		  tooltip: 'PE %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/pe_ratio' ]				  
+				  , (ticker copyReplaceAll: '.' with: '') , '/pe_ratio' ];
+		  actionButtonIcon: BrGlamorousVectorIcons driller
+		  tooltip: 'Debt'
+		  action: [ :aToggle :company | 
+			  WebBrowser openOn: 'http://ycharts.com/companies/'
+				  , (ticker copyReplaceAll: '.' with: '') , '/debt_equity_ratio' ]					  
+				  				  
 ]
 
 { #category : #accessing }
