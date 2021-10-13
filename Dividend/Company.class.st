@@ -207,6 +207,7 @@ Company >> gtDividendHistoryPlotOn: aView [
 		stencil: [
 			HistoryPlot new
 				data: self dividendHistory ;
+				xLabel: [:each | (Date fromSeconds: each) ddmmyyyy];
 				x: [:each | each key asSeconds];
 				y: #value;
 				plot
@@ -223,6 +224,7 @@ Company >> gtPriceHistoryPlotOn: aView [
 		stencil: [
 			HistoryPlot new
 				data: self priceHistory ;
+				xLabel: [:each | (Date fromSeconds: each) ddmmyyyy];
 				x: [:each | each key asSeconds];
 				y: #value;
 				plot
@@ -266,16 +268,12 @@ Company >> gtViewSummary: aView [
 				               aptitude: BrShadowAptitude;
 				               margin: (BlInsets all: 20);
 				               constraintsDo: [ :c | 
-					               c horizontal fitContent.
-					               c vertical fitContent ].
+					               c horizontal matchParent .
+					               c vertical fitContent  ].
 			  nameTextContainer := BlTextElement new
 				                       constraintsDo: [ :c | 
 					                       c horizontal matchParent ];
-				                       margin: (BlInsets
-						                        top: 5
-						                        right: 0
-						                        bottom: 20
-						                        left: 5);
+				                       margin: (BlInsets top: 5 right: 0 bottom: 20 left: 5);
 				                       text:
 					                       ((name , '(' , ticker , ')') asRopedText
 						                        glamorousRegularFont
@@ -297,6 +295,15 @@ Company >> gtViewSummary: aView [
 					                       c vertical matchParent ].
 			  verticalContainer addChild: nameTextContainer.
 			  verticalContainer addChild: detailsTextContainer.
+			  verticalContainer addChild: (HistoryPlot new
+			  		width: 150;
+			  		height: 100;
+					data: (dgrs asOrderedCollection collectWithIndex: [:each :i | i -> each]) ;
+					xLabel: [:each | ''];
+					yLabel: [:each | ''];
+					xTick: dgrs asOrderedCollection size;
+					yTick: 3;
+					plot) asElement.				  
 			  container addChild: verticalContainer.
 			  container ];
 		  actionButtonIcon: BrGlamorousVectorIcons link
@@ -353,7 +360,9 @@ Company >> gtYieldHistoryPlotOn: aView [
 		stencil: [
 			plot := HistoryPlot new
 				data: self dividendYieldHistory5y ;
+				xLabel: [:each | (Date fromSeconds: each) ddmmyyyy];
 				x: [ :each | each key asSeconds ];
+				xTick: 5;
 				y: #value;
 				plot.	
 			 details := BrEditor new

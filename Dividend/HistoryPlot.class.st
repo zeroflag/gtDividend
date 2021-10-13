@@ -21,7 +21,9 @@ Class {
 		'xTick',
 		'xs',
 		'ys',
-		'font'
+		'font',
+		'xLabelBlock',
+		'yLabelBlock'
 	],
 	#category : #Dividend
 }
@@ -57,7 +59,7 @@ HistoryPlot >> drawAxis [
 		width: 2;
 		draw.
 		
-	0 to: ymax by: (ymax / 10) do: [:i |
+	0 to: ymax by: (ymax / yTick) do: [:i |
 		| tick |
 		tick := canvas path
 			moveTo: (x0-3)@(self translateY: i);
@@ -71,7 +73,7 @@ HistoryPlot >> drawAxis [
 			draw.						
 		text := canvas text
 			paint: axisColor;
-  		  string: (i round: 2) asString;
+  		  string: (yLabelBlock value: i);
   		  font: font.
   	  metrics := text measure textMetrics.
   	  text 
@@ -79,7 +81,7 @@ HistoryPlot >> drawAxis [
 			draw.
 	].
 	
-	xmin to: xmax by: (xmax - xmin / 10) do: [:i |
+	xmin to: xmax by: (xmax - xmin / xTick) do: [:i |
 		| tick |
 		tick := canvas path
 			moveTo: (self translateX: i)@(height + y0-3);
@@ -92,7 +94,7 @@ HistoryPlot >> drawAxis [
 			width: 1;
 			draw
 	].
-	xmin to: xmax by: (xmax - xmin / 10) do: [:i |
+	xmin to: xmax by: (xmax - xmin / xTick) do: [:i |
 		| tick |
 		tick := canvas path
 			moveTo: (self translateX: i)@(height + y0-3);
@@ -106,7 +108,7 @@ HistoryPlot >> drawAxis [
 			draw.
 		text := canvas text
 			paint: axisColor;
-  		  string: (Date fromSeconds: i) ddmmyyyy;
+  		  string: (xLabelBlock value: i);
   		  font: font.
   	  metrics := text measure textMetrics.
   	  text 
@@ -140,6 +142,11 @@ HistoryPlot >> drawPoints [
 	].
 ]
 
+{ #category : #accessing }
+HistoryPlot >> height: aNumber [
+	totalHeight := aNumber.
+]
+
 { #category : #initialization }
 HistoryPlot >> initialize [
 	super initialize.
@@ -149,8 +156,12 @@ HistoryPlot >> initialize [
 	y0 := 50.
 	lineColor := Color fromHexString: '#459394'.
 	axisColor := Color fromHexString: '#606060'.
-	yTick := 50000.
-	xTick := 7 days asSeconds.
+	xTick := 10.	
+	yTick := 10.
+	xLabelBlock := #asString.
+	yLabelBlock := [:i | (i round: 2) asString ].
+	xBlock := #key.
+	yBlock := #value.
 
 ]
 
@@ -186,17 +197,27 @@ HistoryPlot >> plot [
 
 { #category : #private }
 HistoryPlot >> translateX: x [ 
-	^ [ (x - xmin) * width / (xmax - xmin) + x0 ] on: ZeroDivide do: [ x0 ]
+	^ ([ (x - xmin) * width / (xmax - xmin) + x0 ] on: ZeroDivide do: [ x0 ]) rounded
 ]
 
 { #category : #private }
 HistoryPlot >> translateY: y [
-	^ y0 + height - (y * height / ymax)
+	^ (y0 + height - (y * height / ymax)) rounded
+]
+
+{ #category : #accessing }
+HistoryPlot >> width: aNumber [
+	totalWidth := aNumber
 ]
 
 { #category : #accessing }
 HistoryPlot >> x: aBlock [
 	xBlock := aBlock
+]
+
+{ #category : #accessing }
+HistoryPlot >> xLabel: aBlock [
+	xLabelBlock := aBlock
 ]
 
 { #category : #accessing }
@@ -207,6 +228,11 @@ HistoryPlot >> xTick: aNumber [
 { #category : #accessing }
 HistoryPlot >> y: aBlock [
 	yBlock := aBlock
+]
+
+{ #category : #accessing }
+HistoryPlot >> yLabel: aBlock [
+	yLabelBlock := aBlock
 ]
 
 { #category : #accessing }

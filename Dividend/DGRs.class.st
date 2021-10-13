@@ -7,7 +7,7 @@ Class {
 		'y5',
 		'y3'
 	],
-	#category : 'Dividend-Dividend'
+	#category : #'Dividend-Dividend'
 }
 
 { #category : #accessing }
@@ -32,16 +32,32 @@ DGRs >> avg [
 ]
 
 { #category : #accessing }
+DGRs >> gtPlotOn: aView [
+	<gtView>
+	| data sum |
+	^ aView explicit
+		title: 'Plot';
+		priority: 5;
+		stencil: [
+			HistoryPlot new
+				data: (self asOrderedCollection collectWithIndex: [:each :i | i -> each]) ;
+				xLabel: [:each | ''];
+				plot
+			].
+]
+
+{ #category : #accessing }
 DGRs >> printOn: aStream [
  aStream 
+ 	nextPutAll: 'DGRs = ';
  	nextPutAll: y10 asString;
- 	nextPutAll: ' => ';
+ 	nextPutAll: '%   ';
  	nextPutAll: y5 asString;
- 	nextPutAll: ' => ';
+ 	nextPutAll: '%   ';
  	nextPutAll: y3 asString;
- 	nextPutAll: ' => ';
+ 	nextPutAll: '%   ';
  	nextPutAll: y1 asString;
- 	nextPutAll: ' m = ';
+ 	nextPutAll: '%   m = ';
  	nextPutAll: (self slope round: 2) asString
 ]
 
