@@ -211,6 +211,11 @@ HistoryPlot >> width: aNumber [
 ]
 
 { #category : #accessing }
+HistoryPlot >> x0: aNumber [
+	x0 := aNumber
+]
+
+{ #category : #accessing }
 HistoryPlot >> x: aBlock [
 	xBlock := aBlock
 ]
@@ -223,6 +228,11 @@ HistoryPlot >> xLabel: aBlock [
 { #category : #accessing }
 HistoryPlot >> xTick: aNumber [
 	xTick := aNumber
+]
+
+{ #category : #accessing }
+HistoryPlot >> y0: aNumber [
+	y0 := aNumber
 ]
 
 { #category : #accessing }

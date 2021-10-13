@@ -296,6 +296,8 @@ Company >> gtViewSummary: aView [
 			  verticalContainer addChild: nameTextContainer.
 			  verticalContainer addChild: detailsTextContainer.
 			  verticalContainer addChild: (HistoryPlot new
+			  		x0: 8;
+			  		y0: 8;
 			  		width: 150;
 			  		height: 100;
 					data: (dgrs asOrderedCollection collectWithIndex: [:each :i | i -> each]) ;

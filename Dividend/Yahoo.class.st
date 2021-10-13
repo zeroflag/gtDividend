@@ -1,7 +1,7 @@
 Class {
 	#name : #Yahoo,
 	#superclass : #Object,
-	#category : 'Dividend-Dividend'
+	#category : #'Dividend-Dividend'
 }
 
 { #category : #accessing }
@@ -20,21 +20,32 @@ Yahoo >> dividendHistory: ticker [
 			? ('events' -> 'div')
 			? ('includeAdjustedClose' -> 'true')).
 					
-	^ self parseHistory: response
+	^ self parseDividendHistory: response
 	
 ]
 
 { #category : #accessing }
-Yahoo >> parseHistory: aString [
-	| csv date dividend history |
+Yahoo >> parseDividendHistory: aString [
+	| csv date price history |
 	csv := CSVParser parse: aString.
 	history := csv lines allButFirst collect: [:line | 
 	  date := Date fromString: (line values at: 1) value.
-	  dividend := (line values at: 2) value asNumber.
-	  date -> dividend ].
+	  price := (line values at: 2) value asNumber.
+	  date -> price ].
 	history sort: [:a :b | a key > b key ].
 	^ history
-	 
+]
+
+{ #category : #accessing }
+Yahoo >> parsePriceHistory: aString [
+	| csv date price history |
+	csv := CSVParser parse: aString.
+	history := csv lines allButFirst collect: [:line | 
+	  date := Date fromString: (line values at: 1) value.
+	  price := (line values at: 5) value asNumber.
+	  date -> price ].
+	history sort: [:a :b | a key > b key ].
+	^ history
 ]
 
 { #category : #accessing }
