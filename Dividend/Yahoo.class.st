@@ -59,6 +59,6 @@ Yahoo >> priceHistory: ticker [
 			? ('events' -> 'history')
 			? ('includeAdjustedClose' -> 'true')).
 					
-	^ self parseHistory: response
+	^ self parsePriceHistory: response
 	
 ]
