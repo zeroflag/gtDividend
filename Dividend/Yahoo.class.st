@@ -13,7 +13,7 @@ Yahoo >> baseUrl [
 Yahoo >> dividendHistory: ticker [
 	| response |
 	response := ZnClient new get:(
-		self baseUrl / ticker 
+		self baseUrl / (self encode: ticker) 
 			? ('period1' -> '221097600')
 			? ('period2' -> DateAndTime now asUnixTime)
 			? ('interval' -> '1mo')
@@ -22,6 +22,11 @@ Yahoo >> dividendHistory: ticker [
 					
 	^ self parseDividendHistory: response
 	
+]
+
+{ #category : #accessing }
+Yahoo >> encode: ticker [ 
+	^ ticker copyReplaceAll: '.' with: '-'
 ]
 
 { #category : #accessing }
@@ -52,7 +57,7 @@ Yahoo >> parsePriceHistory: aString [
 Yahoo >> priceHistory: ticker [
 	| response |
 	response := ZnClient new get:(
-		self baseUrl / ticker 
+		self baseUrl / (self encode: ticker)
 			? ('period1' -> '221097600')
 			? ('period2' -> DateAndTime now asUnixTime)
 			? ('interval' -> '1d')

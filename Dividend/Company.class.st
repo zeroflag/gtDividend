@@ -312,12 +312,12 @@ Company >> gtViewSummary: aView [
 		  tooltip: 'Market watch'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'https://www.marketwatch.com/investing/stock/'
-				  , (ticker copyReplaceAll: '.' with: ''), '/financials/cash-flow' ];	  
+				  , self tickerEncoded, '/financials/cash-flow' ];	  
 		  actionButtonIcon: BrGlamorousVectorIcons note
 		  tooltip: 'Yahoo'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'https://finance.yahoo.com/quote/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/key-statistics?p='
+				  , self tickerEncoded , '/key-statistics?p='
 				  , ticker ];
 		  actionButtonIcon: BrGlamorousVectorIcons edit
 		  tooltip: 'Rating'
@@ -327,17 +327,17 @@ Company >> gtViewSummary: aView [
 		  tooltip: 'Dividend %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/dividend_yield' ];
+				  , self tickerEncoded , '/dividend_yield' ];
 		  actionButtonIcon: BrGlamorousVectorIcons refresh
 		  tooltip: 'PE %'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/pe_ratio' ];
+				  , self tickerEncoded , '/pe_ratio' ];
 		  actionButtonIcon: BrGlamorousVectorIcons driller
 		  tooltip: 'Debt'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , (ticker copyReplaceAll: '.' with: '') , '/debt_equity_ratio' ]					  
+				  , self tickerEncoded , '/debt_equity_ratio' ]					  
 				  				  
 ]
 
@@ -461,7 +461,6 @@ Company >> printOn: aStream [
 
 { #category : #accessing }
 Company >> ticker [
-
 	^ ticker
 ]
 
@@ -469,6 +468,11 @@ Company >> ticker [
 Company >> ticker: anObject [
 
 	ticker := anObject
+]
+
+{ #category : #accessing }
+Company >> tickerEncoded [
+	^ ticker copyReplaceAll: '.' with: ''
 ]
 
 { #category : #accessing }
