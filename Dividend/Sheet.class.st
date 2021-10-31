@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'companies'
 	],
-	#category : 'Dividend-Dividend'
+	#category : #'Dividend-Dividend'
 }
 
 { #category : #accessing }
@@ -51,6 +51,11 @@ Sheet class >> fromString: aString [
 { #category : #accessing }
 Sheet >> all [ 
 	^ Sheet new setCompanies:companies
+]
+
+{ #category : #accessing }
+Sheet >> companies [
+	^ companies
 ]
 
 { #category : #accessing }

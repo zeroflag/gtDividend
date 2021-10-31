@@ -314,11 +314,10 @@ Company >> gtViewSummary: aView [
 			  WebBrowser openOn: 'https://www.marketwatch.com/investing/stock/'
 				  , self tickerEncoded, '/financials/cash-flow' ];	  
 		  actionButtonIcon: BrGlamorousVectorIcons note
-		  tooltip: 'Yahoo'
+		  tooltip: 'SeekingAlpha'
 		  action: [ :aToggle :company | 
-			  WebBrowser openOn: 'https://finance.yahoo.com/quote/'
-				  , self tickerEncoded , '/key-statistics?p='
-				  , ticker ];
+			  WebBrowser openOn: 'https://seekingalpha.com/symbol/'
+				  , self tickerEncoded , '/dividends' ];
 		  actionButtonIcon: BrGlamorousVectorIcons edit
 		  tooltip: 'Rating'
 		  action: [ :aToggle :company | 
@@ -334,10 +333,10 @@ Company >> gtViewSummary: aView [
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
 				  , self tickerEncoded , '/pe_ratio' ];
 		  actionButtonIcon: BrGlamorousVectorIcons driller
-		  tooltip: 'Debt'
+		  tooltip: 'FCF'
 		  action: [ :aToggle :company | 
 			  WebBrowser openOn: 'http://ycharts.com/companies/'
-				  , self tickerEncoded , '/debt_equity_ratio' ]					  
+				  , self tickerEncoded , '/free_cash_flow' ]					  
 				  				  
 ]
 
