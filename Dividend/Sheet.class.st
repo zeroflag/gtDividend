@@ -90,8 +90,14 @@ Sheet >> findByTicker: aString [
 
 { #category : #accessing }
 Sheet >> findValueable: keyValues [
-	| sheet |
-	sheet :=  Sheet new setCompanies:(companies select: [:each | each valueable: keyValues asDictionary ] ).
+	| sheet candidates params |
+	params := keyValues asDictionary.
+	candidates := companies select: [:each | each valueable: params ].
+	candidates := candidates reject: [:each | (params at: #exclude ifAbsent: #()) anySatisfy: [:name | each industry includesSubstring: name caseSensitive: false ]  ].
+	params at: #include ifPresent: [ :lst | 
+		candidates := candidates select: [:each | lst anySatisfy: [:name | each industry includesSubstring: name caseSensitive: false ]  ].
+	].
+	sheet :=  Sheet new setCompanies:candidates.
 	sheet sortByYield.
 	^ sheet
 ]

@@ -476,14 +476,13 @@ Company >> tickerEncoded [
 
 { #category : #accessing }
 Company >> valueable: aDictionary [
-	^ ppe < (aDictionary at: #ppe) and: [ 
-		years >= (aDictionary at: #years) and: [
-		  (dgrs stable: aDictionary) and: [ 
-			  (dgrs above: (aDictionary at: #inflation)) and: [ 
-				  (self chowderGood: aDictionary) and: [ 
-					  yield
-						  between: (aDictionary at: #avgdiv) * 1.5
-						  and: (aDictionary at: #avgdiv) * 5 ] ] ] ] ]
+	^ years >= (aDictionary at: #years) and: [
+		 (dgrs stable: aDictionary) and: [ 
+			 (dgrs above: (aDictionary at: #inflation)) and: [ 
+				 (self chowderGood: aDictionary) and: [ 
+					 yield
+						 between: (aDictionary at: #avgdiv) * 1.5
+						 and: (aDictionary at: #avgdiv) * 5 ] ] ] ] 
 ]
 
 { #category : #accessing }
